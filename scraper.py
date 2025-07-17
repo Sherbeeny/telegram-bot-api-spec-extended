@@ -8,8 +8,7 @@ def get_soup(url):
         response = requests.get(url)
         response.raise_for_status()
         return BeautifulSoup(response.text, "html.parser")
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching {url}: {e}")
+    except requests.exceptions.RequestException:
         return None
 
 
