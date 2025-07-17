@@ -1,0 +1,28 @@
+name: Get Telegram Bot API Spec
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  get-spec:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Fetch spec files
+        run: |
+          curl -s https://raw.githubusercontent.com/PaulSonOfLars/telegram-bot-api-spec/main/api.json -o api.json
+          curl -s https://raw.githubusercontent.com/PaulSonOfLars/telegram-bot-api-spec/main/api.min.json -o api.min.json
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          if ! git diff --staged --quiet; then
+            git commit -m "Update Telegram Bot API spec"
+            git push
+          fi
