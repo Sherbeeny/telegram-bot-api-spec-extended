@@ -1,1 +1,1 @@
-# telegram-api-spec-extended
+# telegram-bot-api-spec-extended
