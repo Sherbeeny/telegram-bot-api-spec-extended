@@ -92,41 +92,40 @@ These directives are **crucial** for developing this advanced project:
 
 -   The `package-lock.json` file (or `yarn.lock` if Yarn is chosen) is **critical** and **must** be committed and kept synchronized with `package.json`. Whenever `package.json` is modified (including version updates, dependency changes), the lock file **must** be updated accordingly by running version sync command of `npm install` (or `yarn install`) immediately after the `package.json` modification and before committing.
 
-## Pre-commit Routine:
+## Pre-commit Hooks
 
-**Before EVERY commit, the following steps MUST be performed in order:**
+This project uses `pre-commit` to enforce code quality and consistency. The pre-commit hooks are configured in the `.pre-commit-config.yaml` file and are run automatically before each commit.
+
+### Setup
+
+To use the pre-commit hooks, you must first install the necessary dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Then, you must install the pre-commit hooks:
+
+```bash
+pre-commit install
+```
+
+### Hooks
+
+The following hooks are run automatically before each commit:
+
+*   **black**: Formats the code according to the black code style.
+*   **flake8**: Lints the code for style and complexity issues.
+*   **mypy**: Statically checks the code for type errors.
+*   **pytest**: Runs the test suite.
 
 ### Pre-commit Checklist:
-- [ ] **Version:** `package.json` version is updated.
-- [ ] **Lock File:** `package-lock.json` is synchronized.
-- [ ] **Linting:** Code passes linter checks.
-- [ ] **Tests:** All tests pass (or failure is documented in commit message).
+
+- [ ] **Version:** `VERSION` file is updated.
 - [ ] **Changelog:** `CHANGELOG.md` is updated.
 - [ ] **Progress:** `AGENT_PROGRESS.md` is updated.
 - [ ] **Commit Message:** The commit message is descriptive and follows conventions.
 - [ ] **Branch:** The commit is on the `by_ai` branch.
-
-### Detailed Steps:
-1.  **Update `package.json` Version**:
-    *   Use the command `TZ='Africa/Cairo' date +'%Y.%m.%d-%H%M'` to generate the new version string.
-    *   Update the `version` field in `package.json` with this new string.
-2.  **Synchronize Lock File**:
-    *   Run `npm install` (or `yarn install`) to update `package-lock.json` based on the new version in `package.json`.
-3.  **Run Linter**:
-    *   Run `npm run lint` (or the equivalent command) to check for code style issues. All issues should be fixed before proceeding.
-4.  **Finalize Code Implementation (if applicable)**: If code changes were made, ensure they are complete and robust.
-5.  **Write/Update Unit and Integration Tests (if applicable)**: If code affecting functionality was changed, ensure comprehensive test coverage. All tests **must** pass before committing. Strive for high test coverage for all logic. Seek best practice aspects for testing, including: stability, reliability, speed, light-weight for memory and processing, performance, and security.
-    *   *Note: If tests are failing due to an unresolved issue, this must be clearly stated in the commit message. The primary directive to version every commit still holds, but the commit message must reflect the state.*
-6.  **Update Documentation (as needed)**:
-    *   Update this AI file (`AGENTS.md`) if new permanent instructions are given or if there's a fundamental change in project context/goals.
-    *   Update `README.md` with any changes to usage, configuration, examples, etc.
-    *   Update API documentation (TSDoc comments) for any modified public APIs.
-    *   **Manually finalize entries in `CHANGELOG.md`** for the new version being committed. Ensure all relevant changes are documented clearly and follow the existing format (e.g., categorizing changes under "Fixed", "Added", "Changed", "Removed", "Documentation", "Internal"). There is no automated script for changelog generation; it requires careful manual updates.
-    *   **Update `AGENT_PROGRESS.md`**: Document the work done in the current session.
-    *   Testing Emphasis: Ensure all tests cover reliability, speed, lightweight, performance, security, and all other best practice aspects.
-6.  **Dependency Update (if applicable and not part of versioning)**: If `package.json` dependencies (not just version) were changed, ensure `npm install` (or `yarn install`) was run to update the lock file (this might be redundant if step 2 was performed correctly).
-7.  **Prepare Commit Message**: Draft a descriptive commit message. The message should clearly state the purpose of the changes and, if applicable, any known issues (like failing tests).
-8.  **Submit Changes**: Commit all modified files (including `package.json`, `package-lock.json`, `CHANGELOG.md`, `AGENT_PROGRESS.md`, source code, documentation, etc.). All commits **must** be made to a branch named `by_ai`, unless explicitly instructed otherwise by the user for the current session. If such specific instructions are given for a different branch name, those take precedence for that session's commit(s).
 
 ---
 

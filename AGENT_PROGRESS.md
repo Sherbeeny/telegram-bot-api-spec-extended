@@ -19,9 +19,12 @@ This file tracks the progress of the AI agent working on this project.
 *   Implemented the scraper in `scraper.py`.
 *   Extracted data for key methods.
 *   Updated `update_extensions.py`.
+*   Installed `pre-commit` and other necessary tools.
+*   Created a `.pre-commit-config.yaml` file.
+*   Updated the `AGENTS.md` file.
 
 ### Current Task
-*   Create `AGENT_PROGRESS.md` and `CHANGELOG.md`.
+*   Update `AGENT_PROGRESS.md`.
 
 ### Known Issues and Challenges
 *   None at the moment.

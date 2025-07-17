@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 def get_soup(url):
     """Fetches the content of a URL and returns a BeautifulSoup object."""
     try:
@@ -10,6 +11,7 @@ def get_soup(url):
     except requests.exceptions.RequestException as e:
         print(f"Error fetching {url}: {e}")
         return None
+
 
 def scrape_api_page():
     """Scrapes the main API documentation page."""
@@ -57,6 +59,7 @@ def scrape_api_page():
 
     return data
 
+
 def scrape_faq_page():
     """Scrapes the FAQ page."""
     soup = get_soup("https://core.telegram.org/bots/faq")
@@ -65,7 +68,7 @@ def scrape_faq_page():
 
     data = {}
     # Find the "My bot is hitting limits, how do I avoid this?" section
-    limit_section = soup.find(text="My bot is hitting limits, how do I avoid this?")
+    limit_section = soup.find(string="My bot is hitting limits, how do I avoid this?")
     if limit_section:
         # The rate limit information is in the following ul tag
         ul = limit_section.find_parent("h4").find_next_sibling("ul")
@@ -80,6 +83,7 @@ def scrape_faq_page():
                     data["broadcast"] = {"per_second": 30}
     return {"x-rate-limit": data}
 
+
 def scrape_features_page():
     """Scrapes the features page."""
     soup = get_soup("https://core.telegram.org/bots/features")
@@ -88,11 +92,12 @@ def scrape_features_page():
     # Placeholder for scraping logic
     return {}
 
+
 def scrape_all():
     """Scrapes all the documentation pages and returns a combined dictionary."""
     api_data = scrape_api_page()
     faq_data = scrape_faq_page()
-    features_data = scrape_features_page()
+    scrape_features_page()
 
     # Add the x-rate-limit data to each method
     if "x-rate-limit" in faq_data:
@@ -105,8 +110,14 @@ def scrape_all():
         "source": "Community-tested",
     }
     api_data["sendMessage"]["x-notes"] = [
-        "The general rate limit is 30 messages per second. The 20 messages per minute per chat limit is a common bottleneck.",
-        "Premium users can send messages up to 8192 characters long, while non-premium users are limited to 4096.",
+        (
+            "The general rate limit is 30 messages per second. "
+            "The 20 messages per minute per chat limit is a common bottleneck."
+        ),
+        (
+            "Premium users can send messages up to 8192 characters long, "
+            "while non-premium users are limited to 4096."
+        ),
     ]
     api_data["sendPhoto"]["x-restrictions"] = {
         "max_file_size_mb": 10,
@@ -114,17 +125,29 @@ def scrape_all():
         "max_ratio": 20,
         "source": "https://core.telegram.org/bots/api#sendphoto",
     }
-    api_data["sendPhoto"]["x-notes"] = "The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20."
+    api_data["sendPhoto"]["x-notes"] = (
+        "The photo must be at most 10 MB in size. "
+        "The photo's width and height must not exceed 10000 in total. "
+        "Width and height ratio must be at most 20."
+    )
     api_data["editMessageText"]["x-restrictions"] = {
         "message_age_limit_hours": 48,
         "source": "https://core.telegram.org/bots/api#editmessagetext",
     }
-    api_data["editMessageText"]["x-notes"] = "A message can only be edited if it was sent less than 48 hours ago."
-    api_data["answerCallbackQuery"]["x-notes"] = "The answer will be displayed to the user as a notification at the top of the chat screen or as an alert."
+    api_data["editMessageText"][
+        "x-notes"
+    ] = "A message can only be edited if it was sent less than 48 hours ago."
+    api_data["answerCallbackQuery"]["x-notes"] = (
+        "The answer will be displayed to the user as a notification at the "
+        "top of the chat screen or as an alert."
+    )
     api_data["getUpdates"]["x-long-polling-behavior"] = {
         "timeout_seconds": 50,
         "source": "https://core.telegram.org/bots/api#getupdates",
     }
-    api_data["getUpdates"]["x-notes"] = "Long polling is used to receive incoming updates. The timeout parameter determines how long the request will wait for an update."
+    api_data["getUpdates"]["x-notes"] = (
+        "Long polling is used to receive incoming updates. "
+        "The timeout parameter determines how long the request will wait for an update."
+    )
 
     return api_data
