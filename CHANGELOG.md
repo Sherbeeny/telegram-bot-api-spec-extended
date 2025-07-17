@@ -14,3 +14,8 @@ and this project adheres to [Timestamp Versioning](https://ant.st/timestamp-vers
 - Refactored `scraper.py` to be more modular and testable.
 - Updated tests in `tests/test_scraper.py` to reflect the changes in `scraper.py`.
 - Updated `extensions.json` and `extensions.min.json` with the latest scraped data.
+- Scraped the rest of the Telegram documentation.
+- Implemented the remaining `x-` fields from `PROJECT_PROMPT.md`.
+- Updated the `VERSION` file.
+
+[end of CHANGELOG.md]
