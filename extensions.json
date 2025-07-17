@@ -1,56 +1,67 @@
 {
   "sendMessage": {
     "x-rate-limit": {
-      "per_second": 30,
-      "per_chat_per_minute": 20,
-      "source": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this"
-    },
-    "x-premium-restrictions": {
-      "max_message_length": 8192,
-      "source": "Community-tested"
-    },
-    "x-notes": [
-      "The general rate limit is 30 messages per second. The 20 messages per minute per chat limit is a common bottleneck.",
-      "Premium users can send messages up to 8192 characters long, while non-premium users are limited to 4096."
-    ]
+      "global": {
+        "per_second": 1
+      },
+      "group": {
+        "per_minute": 20
+      },
+      "broadcast": {
+        "per_second": 30
+      }
+    }
   },
   "sendPhoto": {
     "x-rate-limit": {
-      "per_second": 30,
-      "per_chat_per_minute": 20,
-      "source": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this"
-    },
-    "x-restrictions": {
-      "max_file_size_mb": 10,
-      "max_dimensions_total": 10000,
-      "max_ratio": 20,
-      "source": "https://core.telegram.org/bots/api#sendphoto"
-    },
-    "x-notes": "The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20."
+      "global": {
+        "per_second": 1
+      },
+      "group": {
+        "per_minute": 20
+      },
+      "broadcast": {
+        "per_second": 30
+      }
+    }
   },
   "editMessageText": {
     "x-rate-limit": {
-      "global_per_second": 30,
-      "source": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this"
-    },
-    "x-restrictions": {
-      "message_age_limit_hours": 48,
-      "source": "https://core.telegram.org/bots/api#editmessagetext"
-    },
-    "x-notes": "A message can only be edited if it was sent less than 48 hours ago."
+      "global": {
+        "per_second": 1
+      },
+      "group": {
+        "per_minute": 20
+      },
+      "broadcast": {
+        "per_second": 30
+      }
+    }
   },
   "answerCallbackQuery": {
     "x-rate-limit": {
-      "global_per_second": 30,
-      "source": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this"
-    },
-    "x-notes": "The answer will be displayed to the user as a notification at the top of the chat screen or as an alert."
+      "global": {
+        "per_second": 1
+      },
+      "group": {
+        "per_minute": 20
+      },
+      "broadcast": {
+        "per_second": 30
+      }
+    }
   },
   "getUpdates": {
-    "x-long-polling-behavior": {
-      "timeout_seconds": 50,
-      "source": "https://core.telegram.org/bots/api#getupdates"
-    },
-    "x-notes": "Long polling is used to receive incoming updates. The timeout parameter determines how long the request will wait for an update."
+    "x-rate-limit": {
+      "global": {
+        "per_second": 1
+      },
+      "group": {
+        "per_minute": 20
+      },
+      "broadcast": {
+        "per_second": 30
+      }
+    }
   }
 }
