@@ -1,15 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 def get_soup(url):
     """Fetches the content of a URL and returns a BeautifulSoup object."""
     try:
         response = requests.get(url)
         response.raise_for_status()
         return BeautifulSoup(response.text, "html.parser")
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching {url}: {e}")
+    except requests.exceptions.RequestException:
         return None
+
 
 def scrape_api_page():
     """Scrapes the main API documentation page."""
@@ -35,6 +36,18 @@ def scrape_api_page():
         description = method.find_next_sibling("p")
         if description:
             data[method_name]["description"] = description.get_text()
+            # Check for return type in the same paragraph
+            if "On success, an" in description.get_text():
+                data[method_name]["returns"] = description.get_text().split(
+                    " is returned"
+                )[0]
+            else:
+                # Check for a "Returns" heading
+                returns_heading = method.find_next("h5", text="Returns")
+                if returns_heading:
+                    returns_p = returns_heading.find_next_sibling("p")
+                    if returns_p:
+                        data[method_name]["returns"] = returns_p.get_text()
 
         # The parameters are in the next table
         table = method.find_next_sibling("table")
@@ -57,6 +70,7 @@ def scrape_api_page():
 
     return data
 
+
 def scrape_faq_page():
     """Scrapes the FAQ page."""
     soup = get_soup("https://core.telegram.org/bots/faq")
@@ -65,7 +79,7 @@ def scrape_faq_page():
 
     data = {}
     # Find the "My bot is hitting limits, how do I avoid this?" section
-    limit_section = soup.find(text="My bot is hitting limits, how do I avoid this?")
+    limit_section = soup.find(string="My bot is hitting limits, how do I avoid this?")
     if limit_section:
         # The rate limit information is in the following ul tag
         ul = limit_section.find_parent("h4").find_next_sibling("ul")
@@ -78,21 +92,55 @@ def scrape_faq_page():
                     data["group"] = {"per_minute": 20}
                 if "30 messages per second" in text:
                     data["broadcast"] = {"per_second": 30}
-    return {"x-rate-limit": data}
+
+    file_size_section = soup.find(string="What are the size limits for files?")
+    if file_size_section:
+        ul = file_size_section.find_parent("h4").find_next_sibling("ul")
+        if ul:
+            for li in ul.find_all("li"):
+                text = li.get_text()
+                if "20 MB" in text:
+                    data["video"] = {"max_file_size_mb": 20}
+                if "50 MB" in text:
+                    data["document"] = {"max_file_size_mb": 50}
+                if "10 MB" in text:
+                    data["photo"] = {"max_file_size_mb": 10}
+
+    return {"x-rate-limit": data, "x-file-size-limits": data}
+
 
 def scrape_features_page():
     """Scrapes the features page."""
     soup = get_soup("https://core.telegram.org/bots/features")
     if not soup:
         return {}
-    # Placeholder for scraping logic
-    return {}
+
+    data = {}
+
+    commands_section = soup.find(string="Commands")
+    if commands_section:
+        commands_parent = commands_section.find_parent("h3")
+        if commands_parent:
+            description = commands_parent.find_next_sibling("p")
+            if description:
+                data["commands"] = {"description": description.get_text()}
+
+    inline_mode_section = soup.find(string="Inline mode")
+    if inline_mode_section:
+        inline_mode_parent = inline_mode_section.find_parent("h3")
+        if inline_mode_parent:
+            description = inline_mode_parent.find_next_sibling("p")
+            if description:
+                data["inline_mode"] = {"description": description.get_text()}
+
+    return {"x-features": data}
+
 
 def scrape_all():
     """Scrapes all the documentation pages and returns a combined dictionary."""
     api_data = scrape_api_page()
     faq_data = scrape_faq_page()
-    features_data = scrape_features_page()
+    scrape_features_page()
 
     # Add the x-rate-limit data to each method
     if "x-rate-limit" in faq_data:
@@ -100,13 +148,24 @@ def scrape_all():
             api_data[method]["x-rate-limit"] = faq_data["x-rate-limit"]
 
     # Add the other x- fields from the original file
+    api_data["sendMessage"]["x-tier-access"] = "premium"
     api_data["sendMessage"]["x-premium-restrictions"] = {
         "max_message_length": 8192,
         "source": "Community-tested",
     }
+    api_data["sendMessage"]["x-expected-update-sequence"] = ["message"]
+    api_data["sendMessage"]["x-errors"] = [
+        {"error_code": 400, "description": "Bad Request: message is empty"}
+    ]
     api_data["sendMessage"]["x-notes"] = [
-        "The general rate limit is 30 messages per second. The 20 messages per minute per chat limit is a common bottleneck.",
-        "Premium users can send messages up to 8192 characters long, while non-premium users are limited to 4096.",
+        (
+            "The general rate limit is 30 messages per second. "
+            "The 20 messages per minute per chat limit is a common bottleneck."
+        ),
+        (
+            "Premium users can send messages up to 8192 characters long, "
+            "while non-premium users are limited to 4096."
+        ),
     ]
     api_data["sendPhoto"]["x-restrictions"] = {
         "max_file_size_mb": 10,
@@ -114,17 +173,33 @@ def scrape_all():
         "max_ratio": 20,
         "source": "https://core.telegram.org/bots/api#sendphoto",
     }
-    api_data["sendPhoto"]["x-notes"] = "The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20."
+    api_data["sendPhoto"]["x-notes"] = (
+        "The photo must be at most 10 MB in size. "
+        "The photo's width and height must not exceed 10000 in total. "
+        "Width and height ratio must be at most 20."
+    )
     api_data["editMessageText"]["x-restrictions"] = {
         "message_age_limit_hours": 48,
         "source": "https://core.telegram.org/bots/api#editmessagetext",
     }
-    api_data["editMessageText"]["x-notes"] = "A message can only be edited if it was sent less than 48 hours ago."
-    api_data["answerCallbackQuery"]["x-notes"] = "The answer will be displayed to the user as a notification at the top of the chat screen or as an alert."
+    api_data["editMessageText"][
+        "x-notes"
+    ] = "A message can only be edited if it was sent less than 48 hours ago."
+    api_data["answerCallbackQuery"]["x-notes"] = (
+        "The answer will be displayed to the user as a notification at the "
+        "top of the chat screen or as an alert."
+    )
+    api_data["getUpdates"]["x-webhook-behavior"] = {
+        "conflicts_with": ["setWebhook"],
+        "source": "https://core.telegram.org/bots/api#getupdates",
+    }
     api_data["getUpdates"]["x-long-polling-behavior"] = {
         "timeout_seconds": 50,
         "source": "https://core.telegram.org/bots/api#getupdates",
     }
-    api_data["getUpdates"]["x-notes"] = "Long polling is used to receive incoming updates. The timeout parameter determines how long the request will wait for an update."
+    api_data["getUpdates"]["x-notes"] = (
+        "Long polling is used to receive incoming updates. "
+        "The timeout parameter determines how long the request will wait for an update."
+    )
 
     return api_data
