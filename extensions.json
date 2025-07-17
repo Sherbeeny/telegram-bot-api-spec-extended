@@ -1,0 +1,67 @@
+{
+  "sendMessage": {
+    "x-rate-limit": {
+      "global": {
+        "per_second": 1
+      },
+      "group": {
+        "per_minute": 20
+      },
+      "broadcast": {
+        "per_second": 30
+      }
+    }
+  },
+  "sendPhoto": {
+    "x-rate-limit": {
+      "global": {
+        "per_second": 1
+      },
+      "group": {
+        "per_minute": 20
+      },
+      "broadcast": {
+        "per_second": 30
+      }
+    }
+  },
+  "editMessageText": {
+    "x-rate-limit": {
+      "global": {
+        "per_second": 1
+      },
+      "group": {
+        "per_minute": 20
+      },
+      "broadcast": {
+        "per_second": 30
+      }
+    }
+  },
+  "answerCallbackQuery": {
+    "x-rate-limit": {
+      "global": {
+        "per_second": 1
+      },
+      "group": {
+        "per_minute": 20
+      },
+      "broadcast": {
+        "per_second": 30
+      }
+    }
+  },
+  "getUpdates": {
+    "x-rate-limit": {
+      "global": {
+        "per_second": 1
+      },
+      "group": {
+        "per_minute": 20
+      },
+      "broadcast": {
+        "per_second": 30
+      }
+    }
+  }
+}
