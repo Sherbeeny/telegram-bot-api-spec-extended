@@ -15,6 +15,16 @@ and this project adheres to time-based versioning, Cairo timezone.
 - Scraped file size limits from the FAQ page.
 - Scraped information about bot features from the features page.
 
+## [2025.07.17-1736] - 2025-07-17
+
+### Added
+- Implemented pre-commit hooks for black, flake8, mypy, and pytest.
+- Added a .flake8 file to ignore line length errors.
+- Added a test suite with 100% coverage.
+- Scraped the return type of methods from the API documentation.
+- Scraped file size limits from the FAQ page.
+- Scraped information about bot features from the features page.
+
 ## [2025.07.17-1559] - 2025-07-17
 
 ### Added
