@@ -36,6 +36,18 @@ def scrape_api_page():
         description = method.find_next_sibling("p")
         if description:
             data[method_name]["description"] = description.get_text()
+            # Check for return type in the same paragraph
+            if "On success, an" in description.get_text():
+                data[method_name]["returns"] = description.get_text().split(
+                    " is returned"
+                )[0]
+            else:
+                # Check for a "Returns" heading
+                returns_heading = method.find_next("h5", text="Returns")
+                if returns_heading:
+                    returns_p = returns_heading.find_next_sibling("p")
+                    if returns_p:
+                        data[method_name]["returns"] = returns_p.get_text()
 
         # The parameters are in the next table
         table = method.find_next_sibling("table")
@@ -80,7 +92,21 @@ def scrape_faq_page():
                     data["group"] = {"per_minute": 20}
                 if "30 messages per second" in text:
                     data["broadcast"] = {"per_second": 30}
-    return {"x-rate-limit": data}
+
+    file_size_section = soup.find(string="What are the size limits for files?")
+    if file_size_section:
+        ul = file_size_section.find_parent("h4").find_next_sibling("ul")
+        if ul:
+            for li in ul.find_all("li"):
+                text = li.get_text()
+                if "20 MB" in text:
+                    data["video"] = {"max_file_size_mb": 20}
+                if "50 MB" in text:
+                    data["document"] = {"max_file_size_mb": 50}
+                if "10 MB" in text:
+                    data["photo"] = {"max_file_size_mb": 10}
+
+    return {"x-rate-limit": data, "x-file-size-limits": data}
 
 
 def scrape_features_page():
@@ -88,8 +114,26 @@ def scrape_features_page():
     soup = get_soup("https://core.telegram.org/bots/features")
     if not soup:
         return {}
-    # Placeholder for scraping logic
-    return {}
+
+    data = {}
+
+    commands_section = soup.find(string="Commands")
+    if commands_section:
+        commands_parent = commands_section.find_parent("h3")
+        if commands_parent:
+            description = commands_parent.find_next_sibling("p")
+            if description:
+                data["commands"] = {"description": description.get_text()}
+
+    inline_mode_section = soup.find(string="Inline mode")
+    if inline_mode_section:
+        inline_mode_parent = inline_mode_section.find_parent("h3")
+        if inline_mode_parent:
+            description = inline_mode_parent.find_next_sibling("p")
+            if description:
+                data["inline_mode"] = {"description": description.get_text()}
+
+    return {"x-features": data}
 
 
 def scrape_all():
@@ -104,10 +148,15 @@ def scrape_all():
             api_data[method]["x-rate-limit"] = faq_data["x-rate-limit"]
 
     # Add the other x- fields from the original file
+    api_data["sendMessage"]["x-tier-access"] = "premium"
     api_data["sendMessage"]["x-premium-restrictions"] = {
         "max_message_length": 8192,
         "source": "Community-tested",
     }
+    api_data["sendMessage"]["x-expected-update-sequence"] = ["message"]
+    api_data["sendMessage"]["x-errors"] = [
+        {"error_code": 400, "description": "Bad Request: message is empty"}
+    ]
     api_data["sendMessage"]["x-notes"] = [
         (
             "The general rate limit is 30 messages per second. "
@@ -140,6 +189,10 @@ def scrape_all():
         "The answer will be displayed to the user as a notification at the "
         "top of the chat screen or as an alert."
     )
+    api_data["getUpdates"]["x-webhook-behavior"] = {
+        "conflicts_with": ["setWebhook"],
+        "source": "https://core.telegram.org/bots/api#getupdates",
+    }
     api_data["getUpdates"]["x-long-polling-behavior"] = {
         "timeout_seconds": 50,
         "source": "https://core.telegram.org/bots/api#getupdates",

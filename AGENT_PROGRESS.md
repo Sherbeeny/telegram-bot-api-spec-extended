@@ -22,9 +22,12 @@ This file tracks the progress of the AI agent working on this project.
 *   Installed `pre-commit` and other necessary tools.
 *   Created a `.pre-commit-config.yaml` file.
 *   Updated the `AGENTS.md` file.
+*   Implemented the remaining `x-` fields from `PROJECT_PROMPT.md`.
+*   Scraped the rest of the Telegram documentation.
+*   Updated the tests to maintain 100% coverage.
 
 ### Current Task
-*   Update `AGENT_PROGRESS.md`.
+*   Submit the changes.
 
 ### Known Issues and Challenges
 *   None at the moment.

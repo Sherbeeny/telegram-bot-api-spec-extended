@@ -127,6 +127,13 @@ The following hooks are run automatically before each commit:
 - [ ] **Commit Message:** The commit message is descriptive and follows conventions.
 - [ ] **Branch:** The commit is on the `by_ai` branch.
 
+### Manual Pre-commit Routine
+
+After running the pre-commit command, you must perform the following manual steps:
+
+1.  **Update `AGENT_PROGRESS.md`**: Document the work done in the current session.
+2.  **Update `CHANGELOG.md`**: Manually finalize entries in `CHANGELOG.md` for the new version being committed. Ensure all relevant changes are documented clearly and follow the existing format (e.g., categorizing changes under "Fixed", "Added", "Changed", "Removed", "Documentation", "Internal").
+
 ---
 
 ## Code Quality and Style:
