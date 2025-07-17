@@ -16,8 +16,8 @@ repos:
     hooks:
     -   id: pytest
         name: pytest
-        entry: bash -c 'export PYTHONPATH=.; pytest tests/'
+        entry: bash -c 'export PYTHONPATH=.; pytest --cov --cov-fail-under=100 tests/'
         language: python
         language_version: python3.12
         types: [python]
-        additional_dependencies: [pytest, requests, beautifulsoup4]
+        additional_dependencies: [pytest, pytest-cov, requests, beautifulsoup4]

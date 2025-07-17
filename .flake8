@@ -1,2 +1,4 @@
 [flake8]
-ignore = E501
+per-file-ignores =
+    scraper.py:E501
+    tests/test_scraper.py:E501
