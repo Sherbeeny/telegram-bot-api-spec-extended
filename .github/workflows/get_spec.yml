@@ -19,6 +19,11 @@ jobs:
           curl -s https://raw.githubusercontent.com/PaulSonOfLars/telegram-bot-api-spec/main/api.json -o api.json
           curl -s https://raw.githubusercontent.com/PaulSonOfLars/telegram-bot-api-spec/main/api.min.json -o api.min.json
 
+      - name: Merge spec files
+        run: |
+          jq -s '.[0] * .[1]' api.json extensions.json > spec-extended.json
+          jq -s '.[0] * .[1]' api.min.json extensions.min.json > spec-extended.min.json
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
