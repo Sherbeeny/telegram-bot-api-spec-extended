@@ -136,18 +136,14 @@ def scrape_features_page():
     return {"x-features": data}
 
 
-def scrape_all():
-    """Scrapes all the documentation pages and returns a combined dictionary."""
-    api_data = scrape_api_page()
-    faq_data = scrape_faq_page()
-    scrape_features_page()
-
-    # Add the x-rate-limit data to each method
+def add_x_fields(api_data, faq_data):
+    """
+    Adds the x- fields from the FAQ page and the original file to the API data.
+    """
     if "x-rate-limit" in faq_data:
         for method in api_data:
             api_data[method]["x-rate-limit"] = faq_data["x-rate-limit"]
 
-    # Add the other x- fields from the original file
     api_data["sendMessage"]["x-tier-access"] = "premium"
     api_data["sendMessage"]["x-premium-restrictions"] = {
         "max_message_length": 8192,
@@ -201,5 +197,15 @@ def scrape_all():
         "Long polling is used to receive incoming updates. "
         "The timeout parameter determines how long the request will wait for an update."
     )
+    return api_data
 
+
+def scrape_all():
+    """
+    Scrapes all the documentation pages and returns a combined dictionary.
+    """
+    api_data = scrape_api_page()
+    faq_data = scrape_faq_page()
+    scrape_features_page()
+    api_data = add_x_fields(api_data, faq_data)
     return api_data

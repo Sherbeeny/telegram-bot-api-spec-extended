@@ -5,6 +5,7 @@ from scraper import (
     scrape_features_page,
     scrape_api_page,
     scrape_faq_page,
+    add_x_fields,
 )
 import scraper
 
@@ -139,3 +140,23 @@ def test_scrape_api_page_uppercase_method_name(mock_get_soup):
     mock_soup.find_all.return_value = [mock_h4]
     mock_get_soup.return_value = mock_soup
     assert scrape_api_page() == {}
+
+
+def test_add_x_fields():
+    api_data = {"sendMessage": {}, "sendPhoto": {}, "editMessageText": {}, "answerCallbackQuery": {}, "getUpdates": {}}
+    faq_data = {"x-rate-limit": "test"}
+    data = add_x_fields(api_data, faq_data)
+    assert "x-rate-limit" in data["sendMessage"]
+    assert "x-tier-access" in data["sendMessage"]
+    assert "x-premium-restrictions" in data["sendMessage"]
+    assert "x-expected-update-sequence" in data["sendMessage"]
+    assert "x-errors" in data["sendMessage"]
+    assert "x-notes" in data["sendMessage"]
+    assert "x-restrictions" in data["sendPhoto"]
+    assert "x-notes" in data["sendPhoto"]
+    assert "x-restrictions" in data["editMessageText"]
+    assert "x-notes" in data["editMessageText"]
+    assert "x-notes" in data["answerCallbackQuery"]
+    assert "x-webhook-behavior" in data["getUpdates"]
+    assert "x-long-polling-behavior" in data["getUpdates"]
+    assert "x-notes" in data["getUpdates"]
