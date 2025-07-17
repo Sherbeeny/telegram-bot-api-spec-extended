@@ -11,6 +11,7 @@ This file tracks the progress of the AI agent working on this project.
 4.  **Update `update_extensions.py`.**
 5.  **Create `AGENT_PROGRESS.md` and `CHANGELOG.md`.**
 6.  **Run the script and generate the `extensions.json` files.**
+*   Replaced `package.json` with `VERSION` file.
 7.  **Commit the changes to the `by_ai` branch.**
 
 ### Completed Tasks
