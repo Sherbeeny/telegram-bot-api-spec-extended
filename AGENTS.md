@@ -131,8 +131,10 @@ The following hooks are run automatically before each commit:
 
 After running the pre-commit command, you must perform the following manual steps:
 
-1.  **Update `AGENT_PROGRESS.md`**: Document the work done in the current session.
-2.  **Update `CHANGELOG.md`**: Manually finalize entries in `CHANGELOG.md` for the new version being committed. Ensure all relevant changes are documented clearly and follow the existing format (e.g., categorizing changes under "Fixed", "Added", "Changed", "Removed", "Documentation", "Internal").
+1.  **Get the current timestamp**: Run the command `TZ='Africa/Cairo' date +'%Y.%m.%d-%H%M'` to get the current timestamp in Cairo.
+2.  **Update `VERSION`**: Update the `VERSION` file with the new timestamp.
+3.  **Update `AGENT_PROGRESS.md`**: Document the work done in the current session, and update the session start time with the new timestamp.
+4.  **Update `CHANGELOG.md`**: Manually finalize entries in `CHANGELOG.md` for the new version being committed. Ensure all relevant changes are documented clearly and follow the existing format (e.g., categorizing changes under "Fixed", "Added", "Changed", "Removed", "Documentation", "Internal").
 
 ---
 
