@@ -1,9 +1,27 @@
 {
   "sendMessage": {
     "x-rate-limit": {
-      "per_chat_per_second": 1,
-      "group_per_minute": 20,
-      "broadcast_per_second": 30
+      "per_chat_per_second": {
+        "value": 1,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors."
+        }
+      },
+      "group_per_minute": {
+        "value": 20,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "In a group, bots are not be able to send more than 20 messages per minute."
+        }
+      },
+      "broadcast_per_second": {
+        "value": 30,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "For bulk notifications, bots are not able to broadcast more than about 30 messages per second, unless they enable paid broadcasts to increase the limit."
+        }
+      }
     },
     "x-restrictions": {
       "text": {
@@ -13,9 +31,27 @@
   },
   "sendPhoto": {
     "x-rate-limit": {
-      "per_chat_per_second": 1,
-      "group_per_minute": 20,
-      "broadcast_per_second": 30
+      "per_chat_per_second": {
+        "value": 1,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors."
+        }
+      },
+      "group_per_minute": {
+        "value": 20,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "In a group, bots are not be able to send more than 20 messages per minute."
+        }
+      },
+      "broadcast_per_second": {
+        "value": 30,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "For bulk notifications, bots are not able to broadcast more than about 30 messages per second, unless they enable paid broadcasts to increase the limit."
+        }
+      }
     },
     "x-restrictions": {
       "photo": {
@@ -30,9 +66,27 @@
   },
   "editMessageText": {
     "x-rate-limit": {
-      "per_chat_per_second": 1,
-      "group_per_minute": 20,
-      "broadcast_per_second": 30
+      "per_chat_per_second": {
+        "value": 1,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors."
+        }
+      },
+      "group_per_minute": {
+        "value": 20,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "In a group, bots are not be able to send more than 20 messages per minute."
+        }
+      },
+      "broadcast_per_second": {
+        "value": 30,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "For bulk notifications, bots are not able to broadcast more than about 30 messages per second, unless they enable paid broadcasts to increase the limit."
+        }
+      }
     },
     "x-restrictions": {
       "edit": {
@@ -45,9 +99,27 @@
   },
   "answerCallbackQuery": {
     "x-rate-limit": {
-      "per_chat_per_second": 1,
-      "group_per_minute": 20,
-      "broadcast_per_second": 30
+      "per_chat_per_second": {
+        "value": 1,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors."
+        }
+      },
+      "group_per_minute": {
+        "value": 20,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "In a group, bots are not be able to send more than 20 messages per minute."
+        }
+      },
+      "broadcast_per_second": {
+        "value": 30,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "For bulk notifications, bots are not able to broadcast more than about 30 messages per second, unless they enable paid broadcasts to increase the limit."
+        }
+      }
     },
     "x-restrictions": {
       "text": {
@@ -57,9 +129,27 @@
   },
   "getUpdates": {
     "x-rate-limit": {
-      "per_chat_per_second": 1,
-      "group_per_minute": 20,
-      "broadcast_per_second": 30
+      "per_chat_per_second": {
+        "value": 1,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors."
+        }
+      },
+      "group_per_minute": {
+        "value": 20,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "In a group, bots are not be able to send more than 20 messages per minute."
+        }
+      },
+      "broadcast_per_second": {
+        "value": 30,
+        "ref": {
+          "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+          "text": "For bulk notifications, bots are not able to broadcast more than about 30 messages per second, unless they enable paid broadcasts to increase the limit."
+        }
+      }
     },
     "x-restrictions": {
       "limit": {

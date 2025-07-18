@@ -84,6 +84,19 @@ class Generator:
             json.dump(self.extensions_data, f, separators=(",", ":"))
 
 
+class AIComponent:
+    def __init__(self, extensions_ref_data):
+        self.extensions_ref_data = extensions_ref_data
+
+    def analyze_data(self):
+        """
+        Analyzes the scraped data and suggests a more optimal structure for the
+        extensions.ref.json file.
+        """
+        # TODO: Implement the AI logic here.
+        pass
+
+
 def main():
     """
     Scrapes the Telegram Bot API documentation, generates the extensions data,
@@ -92,30 +105,12 @@ def main():
     generator = Generator()
     generator.generate_extensions_ref_data()
     generator.save_extensions_ref_file()
+
+    ai_component = AIComponent(generator.extensions_ref_data)
+    ai_component.analyze_data()
+
     generator.generate_extensions_data_from_ref()
     generator.save_extensions_file()
-
-    # AI Component Proposal
-    #
-    # The AI component will be a separate script that is called by this script.
-    # It will take the extensions.ref.json file as input and will output a
-    # new extensions.ref.json file with the following enhancements:
-    #
-    # 1.  **Structure optimization:** The AI will analyze the structure of the
-    #     scraped data and suggest a more optimal structure for the
-    #     extensions.ref.json file.
-    # 2.  **Key name suggestions:** The AI will suggest more descriptive and
-    #     consistent key names for the scraped data.
-    # 3.  **Data completion:** The AI will identify missing information in the
-    #     scraped data and will try to complete it using its knowledge of the
-    #     Telegram Bot API.
-    #
-    # The AI component will be implemented using a large language model (LLM)
-    # and will be trained on a dataset of Telegram Bot API documentation and
-    # other relevant data.
-    #
-    # The AI component will be designed to be lightweight and to run within
-    # the constraints of the free GitHub Actions plan.
 
 
 if __name__ == "__main__":

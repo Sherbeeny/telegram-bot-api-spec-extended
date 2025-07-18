@@ -1,3 +1,8 @@
+## [2025.07.18-2103]
+### Changed
+- Added the `AIComponent` class to `update_extensions.py`.
+- Added a test case for the `AIComponent` class.
+
 ## [2025.07.18-2048]
 ### Changed
 - Expanded the scraping capabilities of the `scraper.py` script to include types.

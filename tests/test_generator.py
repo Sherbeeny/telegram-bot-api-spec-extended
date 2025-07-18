@@ -207,6 +207,12 @@ class TestGenerator(unittest.TestCase):
             expected_data,
         )
 
+    @patch("update_extensions.AIComponent")
+    def test_ai_component_is_called(self, mock_ai_component):
+        update_extensions.main()
+        mock_ai_component.assert_called_once()
+        mock_ai_component.return_value.analyze_data.assert_called_once()
+
 
 if __name__ == "__main__":
     unittest.main()
