@@ -4,3 +4,4 @@ black
 mypy
 requests
 beautifulsoup4
+scikit-learn

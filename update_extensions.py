@@ -1,5 +1,6 @@
 import json
 import scraper
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 class Generator:
@@ -93,8 +94,23 @@ class AIComponent:
         Analyzes the scraped data and suggests a more optimal structure for the
         extensions.ref.json file.
         """
-        # TODO: Implement the AI logic here.
-        pass
+        descriptions = []
+        if "methods" in self.extensions_ref_data:
+            for method in self.extensions_ref_data["methods"].values():
+                descriptions.append(method["description"])
+        if "types" in self.extensions_ref_data:
+            for type in self.extensions_ref_data["types"].values():
+                descriptions.append(type["description"])
+
+        vectorizer = CountVectorizer(stop_words="english")
+        X = vectorizer.fit_transform(descriptions)
+        words = vectorizer.get_feature_names_out()
+        word_counts = X.toarray().sum(axis=0)
+        word_counts = sorted(zip(words, word_counts), key=lambda x: x[1], reverse=True)
+
+        print("Most common words:")
+        for word, count in word_counts[:10]:
+            print(f"- {word}: {count}")
 
 
 def main():

@@ -207,11 +207,26 @@ class TestGenerator(unittest.TestCase):
             expected_data,
         )
 
+    @patch("update_extensions.scraper.scrape_all")
     @patch("update_extensions.AIComponent")
-    def test_ai_component_is_called(self, mock_ai_component):
+    def test_ai_component_is_called(self, mock_ai_component, mock_scrape_all):
+        mock_scrape_all.return_value = {"methods": {}, "types": {}}
         update_extensions.main()
-        mock_ai_component.assert_called_once()
+        mock_ai_component.assert_called_once_with({"methods": {}, "types": {}})
         mock_ai_component.return_value.analyze_data.assert_called_once()
+
+    @patch("update_extensions.CountVectorizer")
+    def test_analyze_data(self, mock_count_vectorizer):
+        extensions_ref_data = {
+            "methods": {"getMe": {"description": "A simple method"}},
+            "types": {"User": {"description": "A Telegram user"}},
+        }
+        ai_component = update_extensions.AIComponent(extensions_ref_data)
+        ai_component.analyze_data()
+        mock_count_vectorizer.assert_called_once_with(stop_words="english")
+        mock_count_vectorizer.return_value.fit_transform.assert_called_once_with(
+            ["A simple method", "A Telegram user"]
+        )
 
 
 if __name__ == "__main__":
