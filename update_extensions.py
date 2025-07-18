@@ -104,7 +104,7 @@ class AIComponent:
 
         vectorizer = CountVectorizer(stop_words="english")
         X = vectorizer.fit_transform(descriptions)
-        words = vectorizer.get_feature_names_out()
+        words = sorted(vectorizer.get_feature_names_out())
         word_counts = X.toarray().sum(axis=0)
         word_counts = sorted(zip(words, word_counts), key=lambda x: x[1], reverse=True)
 

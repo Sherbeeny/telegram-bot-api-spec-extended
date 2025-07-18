@@ -1,3 +1,8 @@
+## [2025.07.18-2220]
+### Changed
+- Made the AI component deterministic by sorting the vocabulary before creating the bag-of-words representation.
+- Updated the tests to ensure that the output of the `analyze_data` method is deterministic.
+
 ## [2025.07.18-2149]
 ### Changed
 - Implemented the initial AI logic in the `analyze_data` method of the `AIComponent` class.
