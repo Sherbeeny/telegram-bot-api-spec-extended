@@ -33,15 +33,16 @@ the extensions files will later be merged the spec files to create spec-extended
   }
 }
 
-🧠 You will need to create a script to be weekly run by a github action workflow to:
+🧠 You will need to create a script to be **weekly** run by a github action workflow to:
 	•	Scrape data from https://core.telegram.org/bots/api, https://core.telegram.org/bots/faq, and https://core.telegram.org/bots/features
 	•	Use known community knowledge, experiments, or test cases to deduce unofficial limits and behaviors
 	•	Include documentation-specific fields like x-notes, x-simulated-behavior, x-likely-side-effects, etc.
+    •   Incorporate a lightweight AI component to enhance recognizing which info should be added to extensions.ref.json and the best structure/names to use for the keys/maps of that file as a supplement to api.json without repeating info because the two files will next be merged into spec-extended.json (considering that this script will run weekly on the free plan of GitHub)
 
 🛑 You should not copy data that is already present in api.json. Only augment or extend it with additional context, behaviors, and rules that Telegram does not officially define in their OpenAPI spec.
 
 📁 The final output of the weekly script must:
-	•   First create/update the file “extensions.ref.json” which contains a reference url of the source of the info/behavior (anchor & text highlighted).
+	•   First create/update the file “extensions.ref.json” which contains a reference url of the source of the info/behavior (anchor & text highlighted), name the key “ref”.
 	•	Then the script can generate “extensions.json” & “extensions.min.json” from the “extensions.ref.json”.
 	•	Be self-contained and structured for easy merging with api.json & api.min.json
 	•	Avoid hard-coding unstable values (note any uncertainties via x-source or x-confidence)

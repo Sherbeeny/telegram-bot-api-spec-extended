@@ -39,7 +39,7 @@ class Generator:
         if "x-rate-limit" in self.extensions_ref_data:
             rate_limits = {}
             for key, value in self.extensions_ref_data["x-rate-limit"].items():
-                rate_limits[key] = value["value"]
+                rate_limits[key] = value
             for method in self.extensions_data:
                 self.extensions_data[method]["x-rate-limit"] = rate_limits
 
@@ -94,6 +94,28 @@ def main():
     generator.save_extensions_ref_file()
     generator.generate_extensions_data_from_ref()
     generator.save_extensions_file()
+
+    # AI Component Proposal
+    #
+    # The AI component will be a separate script that is called by this script.
+    # It will take the extensions.ref.json file as input and will output a
+    # new extensions.ref.json file with the following enhancements:
+    #
+    # 1.  **Structure optimization:** The AI will analyze the structure of the
+    #     scraped data and suggest a more optimal structure for the
+    #     extensions.ref.json file.
+    # 2.  **Key name suggestions:** The AI will suggest more descriptive and
+    #     consistent key names for the scraped data.
+    # 3.  **Data completion:** The AI will identify missing information in the
+    #     scraped data and will try to complete it using its knowledge of the
+    #     Telegram Bot API.
+    #
+    # The AI component will be implemented using a large language model (LLM)
+    # and will be trained on a dataset of Telegram Bot API documentation and
+    # other relevant data.
+    #
+    # The AI component will be designed to be lightweight and to run within
+    # the constraints of the free GitHub Actions plan.
 
 
 if __name__ == "__main__":

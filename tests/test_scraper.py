@@ -29,7 +29,7 @@ class TestScraper(unittest.TestCase):
             "x-rate-limit": {
                 "per_chat_per_second": {
                     "value": 1,
-                    "source": {
+                    "ref": {
                         "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
                         "text": "more than one message per second",
                     },
@@ -79,14 +79,14 @@ class TestScraper(unittest.TestCase):
             "x-file-size-limits": {
                 "upload_mb": {
                     "value": 50,
-                    "source": {
+                    "ref": {
                         "url": "https://core.telegram.org/bots/faq#how-do-i-upload-a-large-file",
                         "text": "50 MB",
                     },
                 },
                 "download_mb": {
                     "value": 20,
-                    "source": {
+                    "ref": {
                         "url": "https://core.telegram.org/bots/faq#how-do-i-download-files",
                         "text": "20 MB",
                     },

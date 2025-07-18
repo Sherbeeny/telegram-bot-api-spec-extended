@@ -12,8 +12,8 @@ def get_soup(url):
         return None
 
 
-def get_source_ref(element):
-    """Extracts the source reference from a BeautifulSoup element."""
+def get_ref(element):
+    """Extracts the reference from a BeautifulSoup element."""
     if not element:
         return None
     header = element.find_previous("h4")
@@ -40,17 +40,17 @@ def scrape_rate_limits(soup):
                 if "one message per second" in text:
                     rate_limits["per_chat_per_second"] = {
                         "value": 1,
-                        "source": get_source_ref(li),
+                        "ref": get_ref(li),
                     }
                 if "20 messages per minute" in text:
                     rate_limits["group_per_minute"] = {
                         "value": 20,
-                        "source": get_source_ref(li),
+                        "ref": get_ref(li),
                     }
                 if "30 messages per second" in text:
                     rate_limits["broadcast_per_second"] = {
                         "value": 30,
-                        "source": get_source_ref(li),
+                        "ref": get_ref(li),
                     }
     return {"x-rate-limit": rate_limits}
 
@@ -66,7 +66,7 @@ def scrape_file_size_limits(soup):
             if "50 MB" in text:
                 file_size_limits["upload_mb"] = {
                     "value": 50,
-                    "source": get_source_ref(p),
+                    "ref": get_ref(p),
                 }
 
     file_size_section = soup.find(string="How do I download files?")
@@ -77,7 +77,7 @@ def scrape_file_size_limits(soup):
             if "20 MB" in text:
                 file_size_limits["download_mb"] = {
                     "value": 20,
-                    "source": get_source_ref(p),
+                    "ref": get_ref(p),
                 }
 
     return {"x-file-size-limits": file_size_limits}

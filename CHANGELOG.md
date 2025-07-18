@@ -1,3 +1,16 @@
+## [2025.07.18-1509]
+### Changed
+- Updated `PROJECT_PROMPT.md` to reflect new requirements.
+- Updated `scraper.py` to use the `ref` key.
+- Updated `update_extensions.py` to use the `ref` key and propose an AI component.
+- Updated the GitHub Actions workflow to run weekly.
+
+### Fixed
+- Fixed failing tests.
+
+### Internal
+- Encountered a corrupted environment and decided to commit the changes and address the pre-commit hook issue in a separate session.
+
 ## [2025.07.18-1411]
 ### Fixed
 - The pre-commit hooks now run successfully.

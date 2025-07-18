@@ -10,21 +10,21 @@ class TestGenerator(unittest.TestCase):
             "x-rate-limit": {
                 "per_chat_per_second": {
                     "value": 1,
-                    "source": {
+                    "ref": {
                         "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
                         "text": "In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors.",
                     },
                 },
                 "group_per_minute": {
                     "value": 20,
-                    "source": {
+                    "ref": {
                         "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
                         "text": "In a group, bots are not be able to send more than 20 messages per minute.",
                     },
                 },
                 "broadcast_per_second": {
                     "value": 30,
-                    "source": {
+                    "ref": {
                         "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
                         "text": "For bulk notifications, bots are not able to broadcast more than about 30 messages per second, unless they enable paid broadcasts to increase the limit.",
                     },
@@ -33,14 +33,14 @@ class TestGenerator(unittest.TestCase):
             "x-file-size-limits": {
                 "upload_mb": {
                     "value": 50,
-                    "source": {
+                    "ref": {
                         "url": "https://core.telegram.org/bots/faq#how-do-i-upload-a-large-file",
                         "text": "Bots can currently send files of any type of up to 50 MB in size, so yes, very large files won't work for now. Sorry. This limit may be changed in the future.",
                     },
                 },
                 "download_mb": {
                     "value": 20,
-                    "source": {
+                    "ref": {
                         "url": "https://core.telegram.org/bots/faq#how-do-i-download-files",
                         "text": "Use the getFile method. Please note that this will only work with files of up to 20 MB in size.",
                     },
@@ -55,17 +55,53 @@ class TestGenerator(unittest.TestCase):
         expected_data = {
             "sendMessage": {
                 "x-rate-limit": {
-                    "per_chat_per_second": 1,
-                    "group_per_minute": 20,
-                    "broadcast_per_second": 30,
+                    "per_chat_per_second": {
+                        "value": 1,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors.",
+                        },
+                    },
+                    "group_per_minute": {
+                        "value": 20,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "In a group, bots are not be able to send more than 20 messages per minute.",
+                        },
+                    },
+                    "broadcast_per_second": {
+                        "value": 30,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "For bulk notifications, bots are not able to broadcast more than about 30 messages per second, unless they enable paid broadcasts to increase the limit.",
+                        },
+                    },
                 },
                 "x-restrictions": {"text": {"max_length": 4096}},
             },
             "sendPhoto": {
                 "x-rate-limit": {
-                    "per_chat_per_second": 1,
-                    "group_per_minute": 20,
-                    "broadcast_per_second": 30,
+                    "per_chat_per_second": {
+                        "value": 1,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors.",
+                        },
+                    },
+                    "group_per_minute": {
+                        "value": 20,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "In a group, bots are not be able to send more than 20 messages per minute.",
+                        },
+                    },
+                    "broadcast_per_second": {
+                        "value": 30,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "For bulk notifications, bots are not able to broadcast more than about 30 messages per second, unless they enable paid broadcasts to increase the limit.",
+                        },
+                    },
                 },
                 "x-restrictions": {
                     "photo": {
@@ -78,9 +114,27 @@ class TestGenerator(unittest.TestCase):
             },
             "editMessageText": {
                 "x-rate-limit": {
-                    "per_chat_per_second": 1,
-                    "group_per_minute": 20,
-                    "broadcast_per_second": 30,
+                    "per_chat_per_second": {
+                        "value": 1,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors.",
+                        },
+                    },
+                    "group_per_minute": {
+                        "value": 20,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "In a group, bots are not be able to send more than 20 messages per minute.",
+                        },
+                    },
+                    "broadcast_per_second": {
+                        "value": 30,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "For bulk notifications, bots are not able to broadcast more than about 30 messages per second, unless they enable paid broadcasts to increase the limit.",
+                        },
+                    },
                 },
                 "x-restrictions": {
                     "edit": {"max_age_hours": 48},
@@ -89,17 +143,53 @@ class TestGenerator(unittest.TestCase):
             },
             "answerCallbackQuery": {
                 "x-rate-limit": {
-                    "per_chat_per_second": 1,
-                    "group_per_minute": 20,
-                    "broadcast_per_second": 30,
+                    "per_chat_per_second": {
+                        "value": 1,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors.",
+                        },
+                    },
+                    "group_per_minute": {
+                        "value": 20,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "In a group, bots are not be able to send more than 20 messages per minute.",
+                        },
+                    },
+                    "broadcast_per_second": {
+                        "value": 30,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "For bulk notifications, bots are not able to broadcast more than about 30 messages per second, unless they enable paid broadcasts to increase the limit.",
+                        },
+                    },
                 },
                 "x-restrictions": {"text": {"max_length": 200}},
             },
             "getUpdates": {
                 "x-rate-limit": {
-                    "per_chat_per_second": 1,
-                    "group_per_minute": 20,
-                    "broadcast_per_second": 30,
+                    "per_chat_per_second": {
+                        "value": 1,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors.",
+                        },
+                    },
+                    "group_per_minute": {
+                        "value": 20,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "In a group, bots are not be able to send more than 20 messages per minute.",
+                        },
+                    },
+                    "broadcast_per_second": {
+                        "value": 30,
+                        "ref": {
+                            "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                            "text": "For bulk notifications, bots are not able to broadcast more than about 30 messages per second, unless they enable paid broadcasts to increase the limit.",
+                        },
+                    },
                 },
                 "x-restrictions": {
                     "limit": {
