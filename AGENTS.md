@@ -14,7 +14,8 @@
     *   **`VERSION` file:** Update the `VERSION` file with the new timestamp you just generated.
     *   **`requirements.txt`:** Ensure all dependencies are listed in `requirements.txt`.
 
-4.  **Update Log Files:**
+4.  **Update md Files:**
+    *   **`PROJECT_PROMPT.md`:** Update project prompt regarding project requirements when I specify new ones.
     *   **`CHANGELOG.md`:** Meticulously document all changes under the new version number. Categorize changes under "Fixed", "Added", "Changed", "Removed", "Documentation", or "Internal". This must be done *before* the commit.
     *   **`AGENT_PROGRESS.md`:**
         *   Review the file to understand the last known state and note your session start.
@@ -22,13 +23,14 @@
         *   Log any errors, issues, or important notes from your session in `AGENT_PROGRESS.md`.
         *   Ensure the file accurately reflects the current state before you commit.
 
-5.  **Run Pre-Commit Tool:**
+6.  **Run Pre-Commit Tool:**
     *   Execute the `pre-commit` command to run all automated quality checks (Black, Flake8, MyPy, Unittest).
     *   You must resolve any and all errors reported by the hooks before proceeding.
 
-6.  **Final Prepublish Checklist:**
+7.  **Final Prepublish Checklist:**
     *   [ ] **Branch:** Is the commit on `by_ai`?
     *   [ ] **Version:** Is `VERSION` updated with the Cairo timestamp?
+    *   [ ] **Project Prompt:** Is `PROJECT_PROMPT.md` updated with new/updated project requirements?
     *   [ ] **Changelog:** Is `CHANGELOG.md` updated for the new version?
     *   [ ] **Progress:** Is `AGENT_PROGRESS.md` clean and updated?
     *   [ ] **Pre-Commit Tool:** Did `pre-commit` pass without errors?
