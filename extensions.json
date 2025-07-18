@@ -1,66 +1,38 @@
 {
   "sendMessage": {
-    "x-rate-limit": {
-      "global": {
-        "per_second": 1
-      },
-      "group": {
-        "per_minute": 20
-      },
-      "broadcast": {
-        "per_second": 30
+    "x-restrictions": {
+      "text": {
+        "max_length": 4096
       }
     }
   },
-  "sendPhoto": {
-    "x-rate-limit": {
-      "global": {
-        "per_second": 1
-      },
-      "group": {
-        "per_minute": 20
-      },
-      "broadcast": {
-        "per_second": 30
-      }
-    }
-  },
+  "sendPhoto": {},
   "editMessageText": {
-    "x-rate-limit": {
-      "global": {
-        "per_second": 1
+    "x-restrictions": {
+      "edit": {
+        "max_age_hours": 48
       },
-      "group": {
-        "per_minute": 20
-      },
-      "broadcast": {
-        "per_second": 30
+      "text": {
+        "max_length": 4096
       }
     }
   },
   "answerCallbackQuery": {
-    "x-rate-limit": {
-      "global": {
-        "per_second": 1
-      },
-      "group": {
-        "per_minute": 20
-      },
-      "broadcast": {
-        "per_second": 30
+    "x-restrictions": {
+      "text": {
+        "max_length": 200
       }
     }
   },
   "getUpdates": {
-    "x-rate-limit": {
-      "global": {
-        "per_second": 1
+    "x-restrictions": {
+      "limit": {
+        "min_value": 1,
+        "max_value": 100,
+        "default_value": 100
       },
-      "group": {
-        "per_minute": 20
-      },
-      "broadcast": {
-        "per_second": 30
+      "timeout": {
+        "default_value": 0
       }
     }
   }
