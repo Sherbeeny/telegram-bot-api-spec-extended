@@ -2,43 +2,86 @@ import json
 import scraper
 
 
-def get_key_methods(scraped_data):
-    """
-    Returns a list of key methods to include in the extensions file.
-    """
-    key_methods = [
-        "sendMessage",
-        "sendPhoto",
-        "editMessageText",
-        "answerCallbackQuery",
-        "getUpdates",
-    ]
-    return [method for method in key_methods if method in scraped_data]
+class Generator:
+    def __init__(self):
+        self.scraped_data = scraper.scrape_all()
+        self.extensions_ref_data = {}
+        self.extensions_data = {}
 
+    def generate_extensions_ref_data(self):
+        """
+        Generates the extensions reference data from the scraped data.
+        """
+        self.extensions_ref_data = self.scraped_data
 
-def generate_extensions_data(scraped_data, key_methods):
-    """
-    Generates the extensions data for the given methods.
-    """
-    extensions_data = {}
-    for method_name in key_methods:
-        extensions_data[method_name] = {}
-        if "x-rate-limit" in scraped_data.get(method_name, {}):
-            extensions_data[method_name]["x-rate-limit"] = (
-                scraped_data[method_name]["x-rate-limit"]
-            )
-    return extensions_data
+    def save_extensions_ref_file(self):
+        """
+        Saves the extensions reference data to the extensions.ref.json file.
+        """
+        with open("extensions.ref.json", "w") as f:
+            json.dump(self.extensions_ref_data, f, indent=2)
 
+    def generate_extensions_data_from_ref(self):
+        """
+        Generates the extensions data from the extensions reference data.
+        """
+        key_methods = [
+            "sendMessage",
+            "sendPhoto",
+            "editMessageText",
+            "answerCallbackQuery",
+            "getUpdates",
+        ]
 
-def save_extensions_file(extensions_data):
-    """
-    Saves the extensions data to extensions.json and extensions.min.json.
-    """
-    with open("extensions.json", "w") as f:
-        json.dump(extensions_data, f, indent=2)
+        for method in key_methods:
+            self.extensions_data[method] = {}
 
-    with open("extensions.min.json", "w") as f:
-        json.dump(extensions_data, f, separators=(",", ":"))
+        if "x-rate-limit" in self.extensions_ref_data:
+            rate_limits = {}
+            for key, value in self.extensions_ref_data["x-rate-limit"].items():
+                rate_limits[key] = value["value"]
+            for method in self.extensions_data:
+                self.extensions_data[method]["x-rate-limit"] = rate_limits
+
+        if "x-file-size-limits" in self.extensions_ref_data:
+            if "sendPhoto" in self.extensions_data:
+                self.extensions_data["sendPhoto"]["x-restrictions"] = {
+                    "photo": {
+                        "max_size_mb": 10,
+                        "max_dimensions_total": 10000,
+                        "max_ratio": 20,
+                    },
+                    "caption": {"max_length": 1024},
+                }
+
+        if "sendMessage" in self.extensions_data:
+            self.extensions_data["sendMessage"]["x-restrictions"] = {
+                "text": {"max_length": 4096}
+            }
+        if "editMessageText" in self.extensions_data:
+            self.extensions_data["editMessageText"]["x-restrictions"] = {
+                "edit": {"max_age_hours": 48},
+                "text": {"max_length": 4096},
+            }
+        if "answerCallbackQuery" in self.extensions_data:
+            self.extensions_data["answerCallbackQuery"]["x-restrictions"] = {
+                "text": {"max_length": 200}
+            }
+        if "getUpdates" in self.extensions_data:
+            self.extensions_data["getUpdates"]["x-restrictions"] = {
+                "limit": {"min_value": 1, "max_value": 100, "default_value": 100},
+                "timeout": {"default_value": 0},
+            }
+
+    def save_extensions_file(self):
+        """
+        Saves the extensions data to extensions.json and extensions.min.json.
+        """
+        with open("extensions.json", "w") as f:
+            json.dump(self.extensions_data, f, indent=2)
+
+        with open("extensions.min.json", "w") as f:
+            json.dump(self.extensions_data, f, separators=(",", ":"))
 
 
 def main():
@@ -46,10 +89,11 @@ def main():
     Scrapes the Telegram Bot API documentation, generates the extensions data,
     and saves it to the extensions.json and extensions.min.json files.
     """
-    scraped_data = scraper.scrape_all()
-    key_methods = get_key_methods(scraped_data)
-    extensions_data = generate_extensions_data(scraped_data, key_methods)
-    save_extensions_file(extensions_data)
+    generator = Generator()
+    generator.generate_extensions_ref_data()
+    generator.save_extensions_ref_file()
+    generator.generate_extensions_data_from_ref()
+    generator.save_extensions_file()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,41 @@
+{
+  "x-rate-limit": {
+    "per_chat_per_second": {
+      "value": 1,
+      "source": {
+        "url": "https://core.telegram.org/bots/faq##my-bot-is-hitting-limits-how-do-i-avoid-this",
+        "text": "In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors."
+      }
+    },
+    "group_per_minute": {
+      "value": 20,
+      "source": {
+        "url": "https://core.telegram.org/bots/faq##my-bot-is-hitting-limits-how-do-i-avoid-this",
+        "text": "In a group, bots are not be able to send more than 20 messages per minute."
+      }
+    },
+    "broadcast_per_second": {
+      "value": 30,
+      "source": {
+        "url": "https://core.telegram.org/bots/faq##my-bot-is-hitting-limits-how-do-i-avoid-this",
+        "text": "For bulk notifications, bots are not able to broadcast more than about 30 messages per second, unless they enable paid broadcasts to increase the limit."
+      }
+    }
+  },
+  "x-file-size-limits": {
+    "upload_mb": {
+      "value": 50,
+      "source": {
+        "url": "https://core.telegram.org/bots/faq##how-do-i-upload-a-large-file",
+        "text": "Bots can currently send files of any type of up to 50 MB in size, so yes, very large files won't work for now. Sorry. This limit may be changed in the future."
+      }
+    },
+    "download_mb": {
+      "value": 20,
+      "source": {
+        "url": "https://core.telegram.org/bots/faq##how-do-i-download-files",
+        "text": "Use the getFile method. Please note that this will only work with files of up to 20 MB in size."
+      }
+    }
+  }
+}

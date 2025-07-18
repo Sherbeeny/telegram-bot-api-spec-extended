@@ -1,21 +1,28 @@
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Timestamp Versioning](https://ant.st/timestamp-versioning).
-
-## [Unreleased]
-
-## [2025.07.17-2257] - 2025-07-17
-
+## [2025.07.18-1257]
 ### Changed
-- Refactored `update_extensions.py` to be more modular and testable.
-- Refactored `scraper.py` to be more modular and testable.
-- Updated tests in `tests/test_scraper.py` to reflect the changes in `scraper.py`.
-- Updated `extensions.json` and `extensions.min.json` with the latest scraped data.
-- Scraped the rest of the Telegram documentation.
-- Implemented the remaining `x-` fields from `PROJECT_PROMPT.md`.
-- Updated the `VERSION` file.
+- Reimplemented the scraper and generator with a more modular and robust architecture.
+- The script now generates `extensions.ref.json` with source references.
+- The script now generates `extensions.json` and `extensions.min.json` from `extensions.ref.json`.
+- The GitHub Actions workflow now runs weekly.
+- Added tests for the scraper and generator.
 
-[end of CHANGELOG.md]
+## [2025.07.18-0348]
+### Changed
+- Updated `PROJECT_PROMPT.md` with new requirements.
+- Modified the scraping script to generate `extensions.ref.json`.
+- Modified the script to generate `extensions.json` from `extensions.ref.json`.
+- Updated the GitHub Actions workflow to run weekly.
+- Investigated and proposed an AI component.
+- Refined and tested the script.
+
+## [2025.07.18-0322]
+### Changed
+- Updated `PROJECT_PROMPT.md` to prioritize automation.
+- Refactored `scraper.py` to be more robust and comprehensive.
+- Updated `update_extensions.py` to use the new scraper and generate `extensions.json` correctly.
+- Added tests for `scraper.py` and `update_extensions.py`.
+
+## [2025.07.18-0303]
+### Changed
+- Updated `extensions.json` with more accurate and detailed information for `sendMessage`, `sendPhoto`, `editMessageText`, `answerCallbackQuery`, and `getUpdates` methods.
+- Added `x-restrictions` to document limits for the above methods.
