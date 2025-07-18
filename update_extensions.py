@@ -4,7 +4,7 @@ import scraper
 
 def get_key_methods(scraped_data):
     """
-    Returns a list of key methods that should be included in the extensions file.
+    Returns a list of key methods to include in the extensions file.
     """
     key_methods = [
         "sendMessage",
@@ -23,16 +23,16 @@ def generate_extensions_data(scraped_data, key_methods):
     extensions_data = {}
     for method_name in key_methods:
         extensions_data[method_name] = {}
-        if "x-rate-limit" in scraped_data[method_name]:
-            extensions_data[method_name]["x-rate-limit"] = scraped_data[method_name][
-                "x-rate-limit"
-            ]
+        if "x-rate-limit" in scraped_data.get(method_name, {}):
+            extensions_data[method_name]["x-rate-limit"] = (
+                scraped_data[method_name]["x-rate-limit"]
+            )
     return extensions_data
 
 
 def save_extensions_file(extensions_data):
     """
-    Saves the extensions data to the extensions.json and extensions.min.json files.
+    Saves the extensions data to extensions.json and extensions.min.json.
     """
     with open("extensions.json", "w") as f:
         json.dump(extensions_data, f, indent=2)

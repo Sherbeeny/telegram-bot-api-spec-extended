@@ -143,7 +143,13 @@ def test_scrape_api_page_uppercase_method_name(mock_get_soup):
 
 
 def test_add_x_fields():
-    api_data = {"sendMessage": {}, "sendPhoto": {}, "editMessageText": {}, "answerCallbackQuery": {}, "getUpdates": {}}
+    api_data = {
+        "sendMessage": {},
+        "sendPhoto": {},
+        "editMessageText": {},
+        "answerCallbackQuery": {},
+        "getUpdates": {},
+    }
     faq_data = {"x-rate-limit": "test"}
     data = add_x_fields(api_data, faq_data)
     assert "x-rate-limit" in data["sendMessage"]
