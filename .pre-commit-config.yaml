@@ -16,7 +16,7 @@ repos:
     hooks:
     -   id: pytest
         name: pytest
-        entry: bash -c 'export PYTHONPATH=.; pytest'
+        entry: bash -c 'export PYTHONPATH=.:/tmp/deps; pytest'
         language: python
         language_version: python3.12
         types: [python]

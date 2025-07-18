@@ -1,4 +1,4 @@
-## [2025.07.18-1509]
+## [2025.07.18-1522]
 ### Changed
 - Updated `PROJECT_PROMPT.md` to reflect new requirements.
 - Updated `scraper.py` to use the `ref` key.
@@ -7,9 +7,10 @@
 
 ### Fixed
 - Fixed failing tests.
+- Fixed the test environment by installing dependencies in a temporary directory.
 
 ### Internal
-- Encountered a corrupted environment and decided to commit the changes and address the pre-commit hook issue in a separate session.
+- Completed the pre-commit protocol for the previous session.
 
 ## [2025.07.18-1411]
 ### Fixed
