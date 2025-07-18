@@ -1,3 +1,8 @@
+## [2025.07.18-2251]
+### Changed
+- Implemented the AI logic to suggest a more optimal structure for the `extensions.ref.json` file.
+- Updated the tests to cover the new AI logic.
+
 ## [2025.07.18-2220]
 ### Changed
 - Made the AI component deterministic by sorting the vocabulary before creating the bag-of-words representation.

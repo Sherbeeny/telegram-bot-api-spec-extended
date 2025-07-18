@@ -215,19 +215,38 @@ class TestGenerator(unittest.TestCase):
         mock_ai_component.assert_called_once_with({"methods": {}, "types": {}})
         mock_ai_component.return_value.analyze_data.assert_called_once()
 
-    def test_analyze_data(self):
+    @patch("update_extensions.KMeans")
+    @patch("update_extensions.CountVectorizer")
+    def test_analyze_data(self, mock_count_vectorizer, mock_kmeans):
         extensions_ref_data = {
             "methods": {"getMe": {"description": "A simple method"}},
             "types": {"User": {"description": "A Telegram user"}},
         }
         ai_component = update_extensions.AIComponent(extensions_ref_data)
+        ai_component.analyze_data()
+        mock_count_vectorizer.assert_called_once_with(stop_words="english")
+        mock_count_vectorizer.return_value.fit_transform.assert_called_once_with(
+            ["A simple method", "A Telegram user"]
+        )
+        mock_kmeans.assert_called_once_with(n_clusters=2, random_state=0, n_init="auto")
+        mock_kmeans.return_value.fit.assert_called_once()
+
+    def test_clustering(self):
+        extensions_ref_data = {
+            "methods": {
+                "getMe": {"description": "A simple method"},
+                "sendMessage": {"description": "A simple method"},
+            },
+            "types": {
+                "User": {"description": "A Telegram user"},
+                "Chat": {"description": "A Telegram chat"},
+            },
+        }
+        ai_component = update_extensions.AIComponent(extensions_ref_data)
         with patch("builtins.print") as mock_print:
             ai_component.analyze_data()
-            mock_print.assert_any_call("Most common words:")
-            mock_print.assert_any_call("- simple: 1")
-            mock_print.assert_any_call("- method: 1")
-            mock_print.assert_any_call("- telegram: 1")
-            mock_print.assert_any_call("- user: 1")
+            mock_print.assert_any_call("Clusters:")
+            self.assertTrue(mock_print.mock_calls[1][1][0].startswith("- Cluster"))
 
 
 if __name__ == "__main__":

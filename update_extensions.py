@@ -1,5 +1,6 @@
 import json
 import scraper
+from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import CountVectorizer
 
 
@@ -104,13 +105,28 @@ class AIComponent:
 
         vectorizer = CountVectorizer(stop_words="english")
         X = vectorizer.fit_transform(descriptions)
-        words = sorted(vectorizer.get_feature_names_out())
-        word_counts = X.toarray().sum(axis=0)
-        word_counts = sorted(zip(words, word_counts), key=lambda x: x[1], reverse=True)
 
-        print("Most common words:")
-        for word, count in word_counts[:10]:
-            print(f"- {word}: {count}")
+        kmeans = KMeans(n_clusters=2, random_state=0, n_init="auto")
+        kmeans.fit(X)
+
+        clusters = {}
+        for i, label in enumerate(kmeans.labels_):
+            if label not in clusters:
+                clusters[label] = []
+            if i < len(self.extensions_ref_data["methods"]):
+                clusters[label].append(
+                    list(self.extensions_ref_data["methods"].keys())[i]
+                )
+            else:
+                clusters[label].append(
+                    list(self.extensions_ref_data["types"].keys())[
+                        i - len(self.extensions_ref_data["methods"])
+                    ]
+                )
+
+        print("Clusters:")
+        for label, items in clusters.items():
+            print(f"- Cluster {label}: {', '.join(items)}")
 
 
 def main():
