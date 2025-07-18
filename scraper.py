@@ -83,6 +83,46 @@ def scrape_file_size_limits(soup):
     return {"x-file-size-limits": file_size_limits}
 
 
+def scrape_methods(soup):
+    """Scrapes method information from the API page."""
+    methods = {}
+    methods_section = soup.find("h3", {"id": "available-methods"})
+    if methods_section:
+        for h4 in methods_section.find_next_siblings("h4"):
+            anchor = h4.find("a", {"name": True})
+            if not anchor:
+                continue
+            method_name = anchor.get("name")
+            if not method_name:
+                continue
+
+            description = ""
+            for p in h4.find_next_siblings("p"):
+                if p.find_previous_sibling("h4") != h4:
+                    break
+                description += p.get_text() + "\n"
+
+            parameters = []
+            table = h4.find_next_sibling("table")
+            if table:
+                for tr in table.find_all("tr")[1:]:
+                    tds = tr.find_all("td")
+                    if len(tds) == 4:
+                        parameters.append(
+                            {
+                                "name": tds[0].get_text(),
+                                "type": tds[1].get_text(),
+                                "required": tds[2].get_text(),
+                                "description": tds[3].get_text(),
+                            }
+                        )
+            methods[method_name] = {
+                "description": description.strip(),
+                "parameters": parameters,
+            }
+    return methods
+
+
 def scrape_all():
     """
     Scrapes all the documentation pages and returns a combined dictionary.
@@ -92,5 +132,9 @@ def scrape_all():
     if faq_soup:
         data.update(scrape_rate_limits(faq_soup))
         data.update(scrape_file_size_limits(faq_soup))
+
+    api_soup = get_soup("https://core.telegram.org/bots/api")
+    if api_soup:
+        data["methods"] = scrape_methods(api_soup)
 
     return data

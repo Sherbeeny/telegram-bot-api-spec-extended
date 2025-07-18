@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
+from bs4 import BeautifulSoup
 import scraper
 
 
@@ -94,6 +95,46 @@ class TestScraper(unittest.TestCase):
             }
         }
         self.assertEqual(scraper.scrape_file_size_limits(mock_soup), expected_data)
+
+    def test_scrape_methods(self):
+        html = """
+        <div>
+            <h3 id="available-methods">Available methods</h3>
+            <h4><a name="getMe">getMe</a></h4>
+            <p>A simple method for testing your bot's authentication token.</p>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>user_id</td>
+                        <td>Integer</td>
+                        <td>Yes</td>
+                        <td>Unique identifier of the target user</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        expected_data = {
+            "getMe": {
+                "description": "A simple method for testing your bot's authentication token.",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "type": "Integer",
+                        "required": "Yes",
+                        "description": "Unique identifier of the target user",
+                    }
+                ],
+            }
+        }
+        self.assertEqual(scraper.scrape_methods(soup), expected_data)
 
 
 if __name__ == "__main__":

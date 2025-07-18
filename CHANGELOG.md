@@ -1,3 +1,12 @@
+## [2025.07.18-1826]
+### Changed
+- Migrated the testing framework from pytest to unittest.
+- Updated the pre-commit configuration to use unittest.
+- Expanded the scraping capabilities of the `scraper.py` script to include API methods.
+
+### Fixed
+- Resolved the issues with the pre-commit hook failing due to test file modifications.
+
 ## [2025.07.18-1522]
 ### Changed
 - Updated `PROJECT_PROMPT.md` to reflect new requirements.
