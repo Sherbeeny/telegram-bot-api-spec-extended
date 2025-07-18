@@ -1,3 +1,12 @@
+## [2025.07.18-1411]
+### Fixed
+- The pre-commit hooks now run successfully.
+- The `.coverage` file is now correctly generated.
+
+### Internal
+- Updated `AGENT_PROGRESS.md` to reflect the latest changes.
+- Complied with the pre-commit protocol outlined in `AGENTS.md`.
+
 ## [2025.07.18-1257]
 ### Changed
 - Reimplemented the scraper and generator with a more modular and robust architecture.
