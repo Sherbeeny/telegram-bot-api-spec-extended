@@ -146,6 +146,45 @@ def scrape_features(soup):
     return features
 
 
+def scrape_types(soup):
+    """Scrapes type information from the API page."""
+    types = {}
+    types_section = soup.find("h3", {"id": "available-types"})
+    if types_section:
+        for h4 in types_section.find_next_siblings("h4"):
+            anchor = h4.find("a", {"name": True})
+            if not anchor:
+                continue
+            type_name = anchor.get("name")
+            if not type_name:
+                continue
+
+            description = ""
+            for p in h4.find_next_siblings("p"):
+                if p.find_previous_sibling("h4") != h4:
+                    break
+                description += p.get_text() + "\n"
+
+            fields = []
+            table = h4.find_next_sibling("table")
+            if table:
+                for tr in table.find_all("tr")[1:]:
+                    tds = tr.find_all("td")
+                    if len(tds) == 3:
+                        fields.append(
+                            {
+                                "name": tds[0].get_text(),
+                                "type": tds[1].get_text(),
+                                "description": tds[2].get_text(),
+                            }
+                        )
+            types[type_name] = {
+                "description": description.strip(),
+                "fields": fields,
+            }
+    return types
+
+
 def scrape_all():
     """
     Scrapes all the documentation pages and returns a combined dictionary.
@@ -159,6 +198,7 @@ def scrape_all():
     api_soup = get_soup("https://core.telegram.org/bots/api")
     if api_soup:
         data["methods"] = scrape_methods(api_soup)
+        data["types"] = scrape_types(api_soup)
 
     features_soup = get_soup("https://core.telegram.org/bots/features")
     if features_soup:

@@ -152,6 +152,43 @@ class TestScraper(unittest.TestCase):
         }
         self.assertEqual(scraper.scrape_features(soup), expected_data)
 
+    def test_scrape_types(self):
+        html = """
+        <div>
+            <h3 id="available-types">Available types</h3>
+            <h4><a name="user">User</a></h4>
+            <p>This object represents a Telegram user or bot.</p>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>id</td>
+                        <td>Integer</td>
+                        <td>Unique identifier for this user or bot.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        expected_data = {
+            "user": {
+                "description": "This object represents a Telegram user or bot.",
+                "fields": [
+                    {
+                        "name": "id",
+                        "type": "Integer",
+                        "description": "Unique identifier for this user or bot.",
+                    }
+                ],
+            }
+        }
+        self.assertEqual(scraper.scrape_types(soup), expected_data)
+
 
 if __name__ == "__main__":
     unittest.main()

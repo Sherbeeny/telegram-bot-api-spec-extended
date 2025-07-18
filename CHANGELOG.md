@@ -1,3 +1,8 @@
+## [2025.07.18-2048]
+### Changed
+- Expanded the scraping capabilities of the `scraper.py` script to include types.
+- Updated the tests to cover the new scraping function.
+
 ## [2025.07.18-1843]
 ### Changed
 - Expanded the scraping capabilities of the `scraper.py` script to include features.
