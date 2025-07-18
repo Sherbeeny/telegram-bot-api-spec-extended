@@ -123,6 +123,29 @@ def scrape_methods(soup):
     return methods
 
 
+def scrape_features(soup):
+    """Scrapes feature information from the features page."""
+    features = {}
+    features_section = soup.find("h3", {"id": "what-features-do-bots-have"})
+    if features_section:
+        for h4 in features_section.find_next_siblings("h4"):
+            anchor = h4.find("a", {"name": True})
+            if not anchor:
+                continue
+            feature_name = anchor.get("name")
+            if not feature_name:
+                continue
+
+            description = ""
+            for p in h4.find_next_siblings("p"):
+                if p.find_previous_sibling("h4") != h4:
+                    break
+                description += p.get_text() + "\n"
+
+            features[feature_name] = {"description": description.strip()}
+    return features
+
+
 def scrape_all():
     """
     Scrapes all the documentation pages and returns a combined dictionary.
@@ -136,5 +159,9 @@ def scrape_all():
     api_soup = get_soup("https://core.telegram.org/bots/api")
     if api_soup:
         data["methods"] = scrape_methods(api_soup)
+
+    features_soup = get_soup("https://core.telegram.org/bots/features")
+    if features_soup:
+        data["features"] = scrape_features(features_soup)
 
     return data

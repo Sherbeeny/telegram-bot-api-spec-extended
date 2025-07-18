@@ -1,6 +1,6 @@
 # MASTER INSTRUCTIONS FOR AI AGENTS
 
-## ⚠️ MANDATORY PRE-COMMIT PROTOCOL ⚠️
+## ⚠️ MANDATORY PREPUBLISH ROUTINE ⚠️
 
 **This is the most critical set of instructions and MUST be followed precisely before every commit. No exceptions.**
 
@@ -22,16 +22,16 @@
         *   Log any errors, issues, or important notes from your session in `AGENT_PROGRESS.md`.
         *   Ensure the file accurately reflects the current state before you commit.
 
-5.  **Run Pre-Commit Hooks:**
-    *   Execute the `pre-commit` command to run all automated quality checks (Black, Flake8, MyPy, Pytest).
+5.  **Run Pre-Commit Tool:**
+    *   Execute the `pre-commit` command to run all automated quality checks (Black, Flake8, MyPy, Unittest).
     *   You must resolve any and all errors reported by the hooks before proceeding.
 
-6.  **Final Pre-Commit Checklist:**
+6.  **Final Prepublish Checklist:**
     *   [ ] **Branch:** Is the commit on `by_ai`?
     *   [ ] **Version:** Is `VERSION` updated with the Cairo timestamp?
     *   [ ] **Changelog:** Is `CHANGELOG.md` updated for the new version?
     *   [ ] **Progress:** Is `AGENT_PROGRESS.md` clean and updated?
-    *   [ ] **Hooks:** Did `pre-commit` pass without errors?
+    *   [ ] **Pre-Commit Tool:** Did `pre-commit` pass without errors?
     *   [ ] **Commit Message:** Is the commit message descriptive and conventional?
 
 ---

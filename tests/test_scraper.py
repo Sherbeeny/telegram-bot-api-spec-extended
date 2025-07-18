@@ -136,6 +136,22 @@ class TestScraper(unittest.TestCase):
         }
         self.assertEqual(scraper.scrape_methods(soup), expected_data)
 
+    def test_scrape_features(self):
+        html = """
+        <div>
+            <h3 id="what-features-do-bots-have">What features do bots have?</h3>
+            <h4><a name="inputs">Inputs</a></h4>
+            <p>Users can send messages of all types to bots, including text, files, locations, stickers, voice messages and even dice if they're feeling lucky.</p>
+        </div>
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        expected_data = {
+            "inputs": {
+                "description": "Users can send messages of all types to bots, including text, files, locations, stickers, voice messages and even dice if they're feeling lucky.",
+            }
+        }
+        self.assertEqual(scraper.scrape_features(soup), expected_data)
+
 
 if __name__ == "__main__":
     unittest.main()

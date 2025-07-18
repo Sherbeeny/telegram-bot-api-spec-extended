@@ -1,3 +1,8 @@
+## [2025.07.18-1843]
+### Changed
+- Expanded the scraping capabilities of the `scraper.py` script to include features.
+- Updated the tests to cover the new scraping function.
+
 ## [2025.07.18-1826]
 ### Changed
 - Migrated the testing framework from pytest to unittest.
