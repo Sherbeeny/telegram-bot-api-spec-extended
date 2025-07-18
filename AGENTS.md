@@ -6,35 +6,21 @@
 
 1.  **ALWAYS Commit to the `by_ai` Branch.** All work must be performed on and committed to the `by_ai` branch.
 
-2.  **Generate Timestamp Version:** Before anything else, generate a new version timestamp.
-    *   Run this exact command in the terminal: `TZ='Africa/Cairo' date +'%Y.%m.%d-%H%M'`
-    *   This timestamp is the **official version** for the commit.
+2.  **Select a Task from the Backlog:** Before starting any work, consult `BACKLOG.md` and choose a task to work on.
 
-3.  **Update Core Versioning Files:**
-    *   **`VERSION` file:** Update the `VERSION` file with the new timestamp you just generated.
-    *   **`requirements.txt`:** Ensure all dependencies are listed in `requirements.txt`.
+3.  **Log Progress:** As you work on the task, log your progress, challenges, and decisions in `AGENT_PROGRESS.md`. This file should reflect the current state of your work.
 
-4.  **Update md Files:**
-    *   **`PROJECT_PROMPT.md`:** Update project prompt regarding project requirements when I specify new ones.
-    *   **`CHANGELOG.md`:** Meticulously document all changes under the new version number. Categorize changes under "Fixed", "Added", "Changed", "Removed", "Documentation", or "Internal". This must be done *before* the commit.
-    *   **`AGENT_PROGRESS.md`:**
-        *   Review the file to understand the last known state and note your session start.
-        *   Move completed tasks and descriptions of work from `AGENT_PROGRESS.md` to the `CHANGELOG.md`.
-        *   Log any errors, issues, or important notes from your session in `AGENT_PROGRESS.md`.
-        *   Ensure the file accurately reflects the current state before you commit.
+4.  **Run Prepublish Script:** Once you are ready to commit your progress, run the prepublish script.
+    *   Execute this command from the root of the repository: `./scripts/prepublish.sh`
+    *   This script will guide you through an interactive checklist, generate a version number, and run pre-commit hooks.
 
-6.  **Run Pre-Commit Tool:**
-    *   Execute the `pre-commit` command to run all automated quality checks (Black, Flake8, MyPy, Unittest).
-    *   You must resolve any and all errors reported by the hooks before proceeding.
+5.  **Handle Hook Results and Document:**
+    *   **If hooks pass:** Update `CHANGELOG.md` with the completed work, update `BACKLOG.md` to remove the completed task, and clear `AGENT_PROGRESS.md`.
+    *   **If hooks fail:** Do not update `CHANGELOG.md`. Instead, meticulously document the failure, what you tried, and the current state in `AGENT_PROGRESS.md`. Update `BACKLOG.md` to reflect the new task of fixing the hooks.
 
-7.  **Final Prepublish Checklist:**
-    *   [ ] **Branch:** Is the commit on `by_ai`?
-    *   [ ] **Version:** Is `VERSION` updated with the Cairo timestamp?
-    *   [ ] **Project Prompt:** Is `PROJECT_PROMPT.md` updated with new/updated project requirements?
-    *   [ ] **Changelog:** Is `CHANGELOG.md` updated for the new version?
-    *   [ ] **Progress:** Is `AGENT_PROGRESS.md` clean and updated?
-    *   [ ] **Pre-Commit Tool:** Did `pre-commit` pass without errors?
-    *   [ ] **Commit Message:** Is the commit message descriptive and conventional?
+6.  **Commit Your Work:**
+    *   Commit all changes, including the source code (even if it's in a failing state) and all updated `.md` files.
+    *   Use a clear commit message. For work-in-progress with failing hooks, prefix the message with `[WIP]`.
 
 ---
 
@@ -43,6 +29,7 @@
 Before initiating any planning or development work, it is **mandatory** to familiarize yourself with the full project context by thoroughly reading all Markdown (`.md`) files in the root of this repository.
 
 Key contextual files include:
+*   **`BACKLOG.md`**: For the list of planned tasks.
 *   **`AGENT_PROGRESS.md`**: For continuity and latest progress.
 *   **`PROJECT_PROMPT.md`**: For the original project vision.
 *   **`README.md`**: For project overview and setup.
