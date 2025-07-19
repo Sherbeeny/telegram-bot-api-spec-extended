@@ -64,3 +64,13 @@ behaviors
 	•	Powers mocks and test engines (like telegram-mocker)
 	•	Helps lint, simulate, and test edge cases in Telegram bots
 	•	Works even when Telegram’s docs are incomplete or vague
+
+---
+
+## Documentation and Code Comments
+
+All code must be well-documented with clear and concise comments. This includes:
+
+- Docstrings for all modules, classes, functions, and methods.
+- Inline comments to explain complex logic or assumptions.
+- A comprehensive `README.md` file that explains the project in detail.

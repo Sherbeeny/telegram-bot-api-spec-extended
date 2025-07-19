@@ -81,14 +81,28 @@ class Generator:
 
 
 class AIComponent:
-    def __init__(self, extensions_ref_data):
+    """
+    The AIComponent class is responsible for analyzing the scraped data and
+    suggesting a more optimal structure for the extensions.ref.json file.
+    """
+
+    def __init__(self, extensions_ref_data, previous_extensions_data):
+        """
+        Initializes the AIComponent.
+
+        Args:
+            extensions_ref_data (dict): The scraped data.
+            previous_extensions_data (dict): The previous extensions data.
+        """
         self.extensions_ref_data = extensions_ref_data
+        self.previous_extensions_data = previous_extensions_data
 
     def analyze_data(self):
         """
         Analyzes the scraped data and suggests a more optimal structure for the
         extensions.ref.json file.
         """
+        # Get all descriptions from the scraped data
         descriptions = []
         if "methods" in self.extensions_ref_data:
             for method in self.extensions_ref_data["methods"].values():
@@ -105,14 +119,17 @@ class AIComponent:
 
         if not descriptions:
             print("No data to analyze.")
-            return
+            return {}
 
+        # Use a CountVectorizer to convert the descriptions into a matrix of token counts
         vectorizer = CountVectorizer(stop_words="english")
         X = vectorizer.fit_transform(descriptions)
 
+        # Use KMeans to cluster the descriptions into 2 clusters
         kmeans = KMeans(n_clusters=2, random_state=0, n_init="auto")
         kmeans.fit(X)
 
+        # Create a dictionary to store the clusters
         clusters = {}
         methods_len = len(self.extensions_ref_data.get("methods", {}))
         types_len = len(self.extensions_ref_data.get("types", {}))
@@ -144,7 +161,25 @@ class AIComponent:
                     ]
                 )
 
-        return {str(k): v for k, v in clusters.items()}
+        # Convert the cluster labels to strings
+        clusters = {str(k): v for k, v in clusters.items()}
+
+        # If there is no previous data, return the new clusters
+        if not self.previous_extensions_data:
+            return clusters
+
+        # Create a new dictionary to store the updated clusters
+        updated_clusters = self.previous_extensions_data.get("clusters", {}).copy()
+
+        # Add new items to the clusters
+        for label, items in clusters.items():
+            if label not in updated_clusters:
+                updated_clusters[label] = []
+            for item in items:
+                if item not in updated_clusters[label]:
+                    updated_clusters[label].append(item)
+
+        return updated_clusters
 
 
 def main():
@@ -156,7 +191,9 @@ def main():
     generator.generate_extensions_ref_data()
     generator.save_extensions_ref_file()
 
-    ai_component = AIComponent(generator.extensions_ref_data)
+    ai_component = AIComponent(
+        generator.extensions_ref_data, generator.previous_extensions_data
+    )
     clusters = ai_component.analyze_data()
 
     generator.extensions_data = {"clusters": clusters}
