@@ -27,53 +27,7 @@ class Generator:
         """
         Generates the extensions data from the extensions reference data.
         """
-        key_methods = [
-            "sendMessage",
-            "sendPhoto",
-            "editMessageText",
-            "answerCallbackQuery",
-            "getUpdates",
-        ]
-
-        for method in key_methods:
-            self.extensions_data[method] = {}
-
-        if "x-rate-limit" in self.extensions_ref_data:
-            rate_limits = {}
-            for key, value in self.extensions_ref_data["x-rate-limit"].items():
-                rate_limits[key] = value
-            for method in self.extensions_data:
-                self.extensions_data[method]["x-rate-limit"] = rate_limits
-
-        if "x-file-size-limits" in self.extensions_ref_data:
-            if "sendPhoto" in self.extensions_data:
-                self.extensions_data["sendPhoto"]["x-restrictions"] = {
-                    "photo": {
-                        "max_size_mb": 10,
-                        "max_dimensions_total": 10000,
-                        "max_ratio": 20,
-                    },
-                    "caption": {"max_length": 1024},
-                }
-
-        if "sendMessage" in self.extensions_data:
-            self.extensions_data["sendMessage"]["x-restrictions"] = {
-                "text": {"max_length": 4096}
-            }
-        if "editMessageText" in self.extensions_data:
-            self.extensions_data["editMessageText"]["x-restrictions"] = {
-                "edit": {"max_age_hours": 48},
-                "text": {"max_length": 4096},
-            }
-        if "answerCallbackQuery" in self.extensions_data:
-            self.extensions_data["answerCallbackQuery"]["x-restrictions"] = {
-                "text": {"max_length": 200}
-            }
-        if "getUpdates" in self.extensions_data:
-            self.extensions_data["getUpdates"]["x-restrictions"] = {
-                "limit": {"min_value": 1, "max_value": 100, "default_value": 100},
-                "timeout": {"default_value": 0},
-            }
+        self.extensions_data = self.extensions_ref_data
 
     def save_extensions_file(self):
         """
@@ -102,6 +56,16 @@ class AIComponent:
         if "types" in self.extensions_ref_data:
             for type in self.extensions_ref_data["types"].values():
                 descriptions.append(type["description"])
+        if "faq" in self.extensions_ref_data:
+            for question in self.extensions_ref_data["faq"].values():
+                descriptions.append(question["answer"])
+        if "features" in self.extensions_ref_data:
+            for feature in self.extensions_ref_data["features"].values():
+                descriptions.append(feature["description"])
+
+        if not descriptions:
+            print("No data to analyze.")
+            return
 
         vectorizer = CountVectorizer(stop_words="english")
         X = vectorizer.fit_transform(descriptions)

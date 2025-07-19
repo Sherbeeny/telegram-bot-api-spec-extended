@@ -12,80 +12,56 @@ def get_soup(url):
         return None
 
 
-def get_ref(element):
+def get_ref(element, url):
     """Extracts the reference from a BeautifulSoup element."""
     if not element:
         return None
-    header = element.find_previous("h4")
+    header = element.find_previous(["h3", "h4"])
     if not header:
         return None
     anchor = header.find("a", {"name": True})
     if not anchor:
         return None
+
+    # Clean up the text to remove extra whitespace and newlines
+    text = " ".join(element.get_text().split())
+
     return {
-        "url": f"https://core.telegram.org/bots/faq#{anchor['name']}",
-        "text": element.get_text(),
+        "url": f"{url}#{anchor['name']}",
+        "text": text,
     }
 
 
-def scrape_rate_limits(soup):
-    """Scrapes rate limit information from the FAQ page."""
-    rate_limits = {}
-    limit_section = soup.find(string="My bot is hitting limits, how do I avoid this?")
-    if limit_section:
-        ul = limit_section.find_parent("h4").find_next_sibling("ul")
-        if ul:
-            for li in ul.find_all("li"):
-                text = li.get_text()
-                if "one message per second" in text:
-                    rate_limits["per_chat_per_second"] = {
-                        "value": 1,
-                        "ref": get_ref(li),
-                    }
-                if "20 messages per minute" in text:
-                    rate_limits["group_per_minute"] = {
-                        "value": 20,
-                        "ref": get_ref(li),
-                    }
-                if "30 messages per second" in text:
-                    rate_limits["broadcast_per_second"] = {
-                        "value": 30,
-                        "ref": get_ref(li),
-                    }
-    return {"x-rate-limit": rate_limits}
+def scrape_faq(soup):
+    """Scrapes all questions and answers from the FAQ page."""
+    faq = {}
+    url = "https://core.telegram.org/bots/faq"
+    for h4 in soup.find_all("h4"):
+        anchor = h4.find("a", {"name": True})
+        if not anchor:
+            continue
+        question = anchor.get("name")
+        if not question:
+            continue
 
+        answer = ""
+        for sibling in h4.find_next_siblings():
+            if sibling.name == "h4":
+                break
+            answer += sibling.get_text() + "\n"
 
-def scrape_file_size_limits(soup):
-    """Scrapes file size limit information from the FAQ page."""
-    file_size_limits = {}
-    file_size_section = soup.find(string="How do I upload a large file?")
-    if file_size_section:
-        p = file_size_section.find_parent("h4").find_next_sibling("p")
-        if p:
-            text = p.get_text()
-            if "50 MB" in text:
-                file_size_limits["upload_mb"] = {
-                    "value": 50,
-                    "ref": get_ref(p),
-                }
-
-    file_size_section = soup.find(string="How do I download files?")
-    if file_size_section:
-        p = file_size_section.find_parent("h4").find_next_sibling("p")
-        if p:
-            text = p.get_text()
-            if "20 MB" in text:
-                file_size_limits["download_mb"] = {
-                    "value": 20,
-                    "ref": get_ref(p),
-                }
-
-    return {"x-file-size-limits": file_size_limits}
+        faq[question] = {
+            "question": h4.get_text(),
+            "answer": answer.strip(),
+            "ref": get_ref(h4, url),
+        }
+    return {"faq": faq}
 
 
 def scrape_methods(soup):
     """Scrapes method information from the API page."""
     methods = {}
+    url = "https://core.telegram.org/bots/api"
     methods_section = soup.find("h3", {"id": "available-methods"})
     if methods_section:
         for h4 in methods_section.find_next_siblings("h4"):
@@ -119,36 +95,41 @@ def scrape_methods(soup):
             methods[method_name] = {
                 "description": description.strip(),
                 "parameters": parameters,
+                "ref": get_ref(h4, url),
             }
     return methods
 
 
 def scrape_features(soup):
-    """Scrapes feature information from the features page."""
+    """Scrapes all sections from the features page."""
     features = {}
-    features_section = soup.find("h3", {"id": "what-features-do-bots-have"})
-    if features_section:
-        for h4 in features_section.find_next_siblings("h4"):
-            anchor = h4.find("a", {"name": True})
-            if not anchor:
-                continue
-            feature_name = anchor.get("name")
-            if not feature_name:
-                continue
+    url = "https://core.telegram.org/bots/features"
+    for h4 in soup.find_all("h4"):
+        anchor = h4.find("a", {"name": True})
+        if not anchor:
+            continue
+        feature_name = anchor.get("name")
+        if not feature_name:
+            continue
 
-            description = ""
-            for p in h4.find_next_siblings("p"):
-                if p.find_previous_sibling("h4") != h4:
-                    break
-                description += p.get_text() + "\n"
+        description = ""
+        for sibling in h4.find_next_siblings():
+            if sibling.name == "h4":
+                break
+            description += sibling.get_text() + "\n"
 
-            features[feature_name] = {"description": description.strip()}
-    return features
+        features[feature_name] = {
+            "title": h4.get_text(),
+            "description": description.strip(),
+            "ref": get_ref(h4, url),
+        }
+    return {"features": features}
 
 
 def scrape_types(soup):
     """Scrapes type information from the API page."""
     types = {}
+    url = "https://core.telegram.org/bots/api"
     types_section = soup.find("h3", {"id": "available-types"})
     if types_section:
         for h4 in types_section.find_next_siblings("h4"):
@@ -181,6 +162,7 @@ def scrape_types(soup):
             types[type_name] = {
                 "description": description.strip(),
                 "fields": fields,
+                "ref": get_ref(h4, url),
             }
     return types
 
@@ -190,18 +172,21 @@ def scrape_all():
     Scrapes all the documentation pages and returns a combined dictionary.
     """
     data = {}
-    faq_soup = get_soup("https://core.telegram.org/bots/faq")
-    if faq_soup:
-        data.update(scrape_rate_limits(faq_soup))
-        data.update(scrape_file_size_limits(faq_soup))
+    faq_url = "https://core.telegram.org/bots/faq"
+    features_url = "https://core.telegram.org/bots/features"
+    api_url = "https://core.telegram.org/bots/api"
 
-    api_soup = get_soup("https://core.telegram.org/bots/api")
+    faq_soup = get_soup(faq_url)
+    if faq_soup:
+        data.update(scrape_faq(faq_soup))
+
+    features_soup = get_soup(features_url)
+    if features_soup:
+        data.update(scrape_features(features_soup))
+
+    api_soup = get_soup(api_url)
     if api_soup:
         data["methods"] = scrape_methods(api_soup)
         data["types"] = scrape_types(api_soup)
-
-    features_soup = get_soup("https://core.telegram.org/bots/features")
-    if features_soup:
-        data["features"] = scrape_features(features_soup)
 
     return data

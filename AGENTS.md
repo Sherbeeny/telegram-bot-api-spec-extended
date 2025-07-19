@@ -6,19 +6,33 @@
 
 1.  **ALWAYS Commit to the `by_ai` Branch.** All work must be performed on and committed to the `by_ai` branch.
 
-2.  **Select a Task from the Backlog:** Before starting any work, consult `BACKLOG.md` and choose a task to work on.
+2.  **Start the Prepublish Routine:**
+    *   To begin the prepublish routine, run the following command from the root of the repository:
+        ```
+        ./scripts/prepublish.sh
+        ```
+    *   This script will perform automated checks and then guide you through a chain of manual checklist scripts.
 
-3.  **Log Progress:** As you work on the task, log your progress, challenges, and decisions in `AGENT_PROGRESS.md`. This file should reflect the current state of your work.
+3.  **Follow the Script Chain:**
+    *   After the initial `prepublish.sh` script completes, it will instruct you to run the first script in the manual checklist chain.
+    *   You must follow the instructions provided by each script in the chain, running them in the correct order.
+    *   Each script will tell you the exact command to run for the next step.
+    *   The full script chain is:
+        1.  `prepublish.sh`
+        2.  `1_context_refresh.sh`
+        3.  `2_branch_check.sh`
+        4.  `3_backlog_update.sh`
+        5.  `4_changelog_update.sh`
+        6.  `5_agent_progress_update.sh`
+        7.  `6_project_prompt_update.sh`
+        8.  `7_final_commit.sh`
 
-4.  **Run Prepublish Script:** Once you are ready to commit your progress, run the prepublish script.
-    *   Execute this command from the root of the repository: `./scripts/prepublish.sh`
-    *   This script will guide you through an interactive checklist, generate a version number, and run pre-commit hooks.
+4.  **Handle Hook Results and Document:**
+    *   **If hooks pass:** When you reach the documentation steps in the script chain, update `CHANGELOG.md` with the completed work, update `BACKLOG.md` to remove the completed task, and clear `AGENT_PROGRESS.md`.
+    *   **If hooks fail:** Do not update `CHANGELOG.md`. Instead, when you reach the appropriate step in the script chain, meticulously document the failure, what you tried, and the current state in `AGENT_PROGRESS.md`. Update `BACKLOG.md` to reflect the new task of fixing the hooks.
 
-5.  **Handle Hook Results and Document:**
-    *   **If hooks pass:** Update `CHANGELOG.md` with the completed work, update `BACKLOG.md` to remove the completed task, and clear `AGENT_PROGRESS.md`.
-    *   **If hooks fail:** Do not update `CHANGELOG.md`. Instead, meticulously document the failure, what you tried, and the current state in `AGENT_PROGRESS.md`. Update `BACKLOG.md` to reflect the new task of fixing the hooks.
-
-6.  **Commit Your Work:**
+5.  **Final Commit:**
+    *   The final script in the chain (`7_final_commit.sh`) will instruct you to commit your changes.
     *   Commit all changes, including the source code (even if it's in a failing state) and all updated `.md` files.
     *   Use a clear commit message. For work-in-progress with failing hooks, prefix the message with `[WIP]`.
 
