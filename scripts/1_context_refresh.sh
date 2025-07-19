@@ -1,10 +1,10 @@
 #!/bin/bash
 
 echo "--------------------------------------------------"
-echo "Step 6: Agent Progress Update"
+echo "Step 1: Context Refresh"
 echo "--------------------------------------------------"
-echo "Please ensure AGENT_PROGRESS.md is updated with the latest progress or details of any failures/challenges."
+echo "Please refresh your context by re-reading ABENTS.md and all relevant .md files and the session plan."
 echo "Once you have done this, run the next script in the chain:"
 echo ""
-echo "    ./scripts/7_project_prompt_update.sh"
+echo "    ./scripts/2_branch_check.sh"
 echo ""

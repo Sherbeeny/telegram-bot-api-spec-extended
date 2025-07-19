@@ -1,9 +1,76 @@
 import json
-import scraper
-from sklearn.cluster import KMeans
-from sklearn.feature_extraction.text import CountVectorizer
 import datetime
 import pytz
+import requests
+from bs4 import BeautifulSoup
+
+URLS = ["https://core.telegram.org/bots/faq", "https://core.telegram.org/bots/features"]
+
+
+class Scraper:
+    def __init__(self, urls, api_data):
+        self.urls = urls
+        self.api_data = api_data
+        self.scraped_data = {"methods": {}, "types": {}}
+
+    def run(self):
+        """
+        Runs the scraping process.
+        """
+        for url in self.urls:
+            response = requests.get(url)
+            soup = BeautifulSoup(response.content, "html.parser")
+            if "faq" in url:
+                self.scraped_data.update(self._parse_faq(soup))
+            else:
+                supplemental_data = self._parse_supplemental_data(soup)
+                for method, data in supplemental_data.get("methods", {}).items():
+                    if method in self.scraped_data["methods"]:
+                        self.scraped_data["methods"][method].update(data)
+                    else:
+                        self.scraped_data["methods"][method] = data
+        return self.scraped_data
+
+    def _parse_supplemental_data(self, soup):
+        """
+        Parses a page for supplemental data for methods and types.
+        """
+        supplemental_data = {"methods": {}, "types": {}}
+        return supplemental_data
+
+    def _parse_faq(self, soup):
+        """
+        Parses the FAQ page.
+        """
+        rate_limit_text = ""
+        rate_limit_value = 0
+
+        h4_tag = soup.find(
+            "a", {"name": "my-bot-is-hitting-limits-how-do-i-avoid-this"}
+        )
+        if h4_tag:
+            for sibling in h4_tag.parent.find_next_siblings():
+                if sibling.name == "h4":
+                    break
+                if sibling.name == "p":
+                    rate_limit_text += sibling.get_text() + " "
+
+        if "at no cost" in rate_limit_text:
+            rate_limit_value = 30
+        if "at a cost" in rate_limit_text:
+            rate_limit_value = 1000
+
+        return {
+            "x-rate-limits": {
+                "per_second": {
+                    "ref": {
+                        "url": "https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this",
+                        "text": rate_limit_text.strip(),
+                    },
+                    "value": rate_limit_value,
+                }
+            }
+        }
 
 
 def get_cairo_time():
@@ -13,10 +80,20 @@ def get_cairo_time():
 
 class Generator:
     def __init__(self):
-        self.scraped_data = scraper.scrape_all()
+        self.api_data = self.load_api_data()
+        self.scraper = Scraper(URLS, self.api_data)
+        self.scraped_data = self.scraper.run()
         self.extensions_ref_data = {}
         self.extensions_data = {}
         self.previous_extensions_data = self.load_previous_extensions_data()
+
+    def load_api_data(self):
+        """Loads the api.json file."""
+        try:
+            with open("api.json", "r") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return {"methods": {}, "types": {}}
 
     def load_previous_extensions_data(self):
         """Loads the previous extensions data from extensions.json."""
@@ -67,11 +144,9 @@ class Generator:
         if not self.previous_extensions_data:
             return True
 
-        # Create copies of the data to avoid modifying the originals
         previous_data = self.previous_extensions_data.copy()
         current_data = self.extensions_data.copy()
 
-        # Remove the timestamp fields for comparison
         previous_data.pop("x-last-check", None)
         previous_data.pop("x-last-edit", None)
         current_data.pop("x-last-check", None)
@@ -82,104 +157,38 @@ class Generator:
 
 class AIComponent:
     """
-    The AIComponent class is responsible for analyzing the scraped data and
-    suggesting a more optimal structure for the extensions.ref.json file.
+    The AIComponent class is responsible for structuring the scraped data.
     """
 
-    def __init__(self, extensions_ref_data, previous_extensions_data):
+    def __init__(self, scraped_data, api_data):
         """
         Initializes the AIComponent.
 
         Args:
-            extensions_ref_data (dict): The scraped data.
-            previous_extensions_data (dict): The previous extensions data.
+            scraped_data (dict): The scraped data.
+            api_data (dict): The data from api.json.
         """
-        self.extensions_ref_data = extensions_ref_data
-        self.previous_extensions_data = previous_extensions_data
+        self.scraped_data = scraped_data
+        self.api_data = api_data
 
-    def analyze_data(self):
+    def structure_data(self):
         """
-        Analyzes the scraped data and suggests a more optimal structure for the
-        extensions.ref.json file.
+        Structures the scraped data into the desired format, avoiding duplication.
         """
-        # Get all descriptions from the scraped data
-        descriptions = []
-        if "methods" in self.extensions_ref_data:
-            for method in self.extensions_ref_data["methods"].values():
-                descriptions.append(method["description"])
-        if "types" in self.extensions_ref_data:
-            for type in self.extensions_ref_data["types"].values():
-                descriptions.append(type["description"])
-        if "faq" in self.extensions_ref_data:
-            for question in self.extensions_ref_data["faq"].values():
-                descriptions.append(question["answer"])
-        if "features" in self.extensions_ref_data:
-            for feature in self.extensions_ref_data["features"].values():
-                descriptions.append(feature["description"])
+        structured_data = {"methods": {}, "types": {}}
 
-        if not descriptions:
-            print("No data to analyze.")
-            return {}
+        if "x-rate-limits" in self.scraped_data:
+            structured_data["x-rate-limits"] = self.scraped_data["x-rate-limits"]
 
-        # Use a CountVectorizer to convert the descriptions into a matrix of token counts
-        vectorizer = CountVectorizer(stop_words="english")
-        X = vectorizer.fit_transform(descriptions)
+        for method_name, method_data in self.scraped_data.get("methods", {}).items():
+            if method_name in self.api_data.get("methods", {}):
+                for key, value in method_data.items():
+                    if key.startswith("x-"):
+                        if method_name not in structured_data["methods"]:
+                            structured_data["methods"][method_name] = {}
+                        structured_data["methods"][method_name][key] = value
 
-        # Use KMeans to cluster the descriptions into 2 clusters
-        kmeans = KMeans(n_clusters=2, random_state=0, n_init="auto")
-        kmeans.fit(X)
-
-        # Create a dictionary to store the clusters
-        clusters = {}
-        methods_len = len(self.extensions_ref_data.get("methods", {}))
-        types_len = len(self.extensions_ref_data.get("types", {}))
-        faq_len = len(self.extensions_ref_data.get("faq", {}))
-        features_len = len(self.extensions_ref_data.get("features", {}))
-
-        for i, label in enumerate(kmeans.labels_):
-            if label not in clusters:
-                clusters[label] = []
-
-            if i < methods_len:
-                clusters[label].append(
-                    list(self.extensions_ref_data["methods"].keys())[i]
-                )
-            elif i < methods_len + types_len:
-                clusters[label].append(
-                    list(self.extensions_ref_data["types"].keys())[i - methods_len]
-                )
-            elif i < methods_len + types_len + faq_len:
-                clusters[label].append(
-                    list(self.extensions_ref_data["faq"].keys())[
-                        i - methods_len - types_len
-                    ]
-                )
-            elif i < methods_len + types_len + faq_len + features_len:
-                clusters[label].append(
-                    list(self.extensions_ref_data["features"].keys())[
-                        i - methods_len - types_len - faq_len
-                    ]
-                )
-
-        # Convert the cluster labels to strings
-        clusters = {str(k): v for k, v in clusters.items()}
-
-        # If there is no previous data, return the new clusters
-        if not self.previous_extensions_data:
-            return clusters
-
-        # Create a new dictionary to store the updated clusters
-        updated_clusters = self.previous_extensions_data.get("clusters", {}).copy()
-
-        # Add new items to the clusters
-        for label, items in clusters.items():
-            if label not in updated_clusters:
-                updated_clusters[label] = []
-            for item in items:
-                if item not in updated_clusters[label]:
-                    updated_clusters[label].append(item)
-
-        return updated_clusters
+        return structured_data
 
 
 def main():
@@ -191,12 +200,10 @@ def main():
     generator.generate_extensions_ref_data()
     generator.save_extensions_ref_file()
 
-    ai_component = AIComponent(
-        generator.extensions_ref_data, generator.previous_extensions_data
-    )
-    clusters = ai_component.analyze_data()
+    ai_component = AIComponent(generator.extensions_ref_data, generator.api_data)
+    structured_data = ai_component.structure_data()
 
-    generator.extensions_data = {"clusters": clusters}
+    generator.extensions_data = structured_data
     generator.save_extensions_file()
 
 
