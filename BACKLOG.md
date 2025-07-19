@@ -13,6 +13,20 @@ This document tracks planned tasks, features, and bug fixes for the project. It 
 
 - **Refine the AI Component:**
     - Enhance the AI component to more actively assist in identifying and structuring new information from the scraped text, going beyond just suggesting a general structure.
+    - Ensure the AI output is deterministic.
+    - Ensure the AI intelligently updates existing entries rather than creating new ones.
+
+## Low Priority
+
+- **Expand Scraper to Community Sources:**
+    - Add functionality to the scraper to incorporate information from community sources and experiments.
+- **Add Documentation-Specific Fields:**
+    - Implement logic to include fields like `x-notes`, `x-simulated-behavior`, and `x-likely-side-effects` in the generated JSON.
+- **Ensure Valid OpenAPI Extensions:**
+    - Add validation to ensure all extra data is formatted as valid OpenAPI extensions.
+- **Implement Comprehensive Data Categories:**
+    - Expand the scraper and data processing to extract and categorize a wide range of information, including rate limits, tier access, webhook behavior, restrictions, and error handling.
+
 
 ## Completed
 

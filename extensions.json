@@ -1,39 +1,66 @@
 {
-  "sendMessage": {
-    "x-restrictions": {
-      "text": {
-        "max_length": 4096
-      }
-    }
+  "clusters": {
+    "0": [
+      "how-do-i-create-a-bot",
+      "i-39m-a-developer-where-can-i-find-some-examples",
+      "will-you-add-x-to-the-bot-api",
+      "what-messages-will-my-bot-get",
+      "why-doesn-39t-my-bot-see-messages-from-other-bots",
+      "how-do-i-get-updates",
+      "long-polling-gives-me-the-same-updates-again-and-again",
+      "i-39m-having-problems-with-webhooks",
+      "i-39m-having-trouble-with-my-self-signed-certificate",
+      "how-can-i-make-sure-that-webhook-requests-are-coming-from-telegr",
+      "how-can-i-make-requests-in-response-to-updates",
+      "how-do-i-download-files",
+      "how-do-i-upload-a-large-file",
+      "can-i-count-on-file-ids-to-be-persistent",
+      "my-bot-is-hitting-limits-how-do-i-avoid-this",
+      "how-can-i-message-all-of-my-bot-39s-subscribers-at-once",
+      "commands",
+      "keyboards",
+      "inline-keyboards",
+      "menu-button",
+      "global-commands",
+      "inline-requests",
+      "deep-linking",
+      "attachment-menu",
+      "telegram-stars",
+      "digital-products",
+      "paid-media",
+      "subscription-plans",
+      "revenue-sharing-from-telegram-ads",
+      "seamless-integration-with-telegram",
+      "mini-app-previews",
+      "mini-app-store",
+      "home-screen-shortcuts",
+      "customizable-loading-screens",
+      "full-screen-mode",
+      "setting-emoji-status",
+      "sharing-media",
+      "sharing-from-mini-apps-to-stories",
+      "geolocation-access",
+      "device-motion-tracking",
+      "device-hardware-info",
+      "widgets",
+      "privacy-mode",
+      "dedicated-test-environment",
+      "creating-a-bot-in-the-test-environment",
+      "status-alerts",
+      "local-bot-api",
+      "creating-a-new-bot",
+      "about-text-description-and-profile-media",
+      "generating-an-authentication-token",
+      "transfer-ownership",
+      "botfather-commands",
+      "edit-bots",
+      "edit-settings",
+      "manage-games"
+    ],
+    "1": [
+      "inline-login"
+    ]
   },
-  "sendPhoto": {},
-  "editMessageText": {
-    "x-restrictions": {
-      "edit": {
-        "max_age_hours": 48
-      },
-      "text": {
-        "max_length": 4096
-      }
-    }
-  },
-  "answerCallbackQuery": {
-    "x-restrictions": {
-      "text": {
-        "max_length": 200
-      }
-    }
-  },
-  "getUpdates": {
-    "x-restrictions": {
-      "limit": {
-        "min_value": 1,
-        "max_value": 100,
-        "default_value": 100
-      },
-      "timeout": {
-        "default_value": 0
-      }
-    }
-  }
+  "x-last-check": "2025-07-19T04:12:53.103107+03:00",
+  "x-last-edit": "2025-07-19T04:12:53.103107+03:00"
 }
