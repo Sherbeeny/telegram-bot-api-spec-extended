@@ -13,15 +13,17 @@ This document tracks planned tasks, features, and bug fixes for the project. It 
 
 ## Medium Priority
 
-- **Implement Timestamp Logic:**
-    - Add the logic to `update_extensions.py` to correctly manage the `x-last-check` and `x-last-edit` timestamps in the generated JSON files.
 - **Implement the Merging Logic:**
     - Create a new script or add to an existing one the functionality to merge the generated `extensions.json` with `api.json` to produce `spec-extended.json`.
+- **Fix GitHub Actions Workflow:** **(DONE)**
+    - The GitHub Actions workflow for `update_extensions.py` was failing due to missing dependencies. This has been fixed by installing dependencies from `requirements.txt`.
 
 ## Low Priority
 
 - **Refine the AI Component:**
     - Enhance the AI component to more actively assist in identifying and structuring new information from the scraped text, going beyond just suggesting a general structure.
+- **Implement Timestamp Logic:** **(DONE)**
+    - Add the logic to `update_extensions.py` to correctly manage the `x-last-check` and `x-last-edit` timestamps in the generated JSON files.
 
 ## Ideas & Future Work
 

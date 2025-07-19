@@ -1,3 +1,7 @@
+## [2025.07.19-1508]
+### Fixed
+- The GitHub Actions workflow for `update_extensions.py` was failing due to missing dependencies. This has been fixed by installing dependencies from `requirements.txt`.
+
 ## [2025.07.19-1334]
 ### Changed
 - Refactored the scraper to first load and analyze `api.json` to avoid duplicating information.
