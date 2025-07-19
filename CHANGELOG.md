@@ -1,3 +1,7 @@
+## [2025.07.19-0941]
+### Changed
+- Enhanced the `README.md` file with more detailed information.
+
 ## [2025.07.19-0431]
 ### Changed
 - Enhanced the `README.md` file.
