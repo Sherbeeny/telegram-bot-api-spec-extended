@@ -53,15 +53,15 @@ behaviors
 
 
 🧩 Example categories to include per method or globally:
-	•	x-rate-limit (global, per-method, per-chat, per-user)
-	•	x-tier-access (premium vs non-premium, verified bots)
+	•	x-rate-limit (global, per-method, per-chat, per-user, per-group, per channel, paid-broadcast, etc)
+	•	x-tier-access (premium, non-premium, verified bots, etc)
 	•	x-webhook-behavior and x-long-polling-behavior
 	•	x-restrictions (e.g., max number of buttons, max size of media, max length of messages)
 	•	x-errors (typical errors this method may trigger and how to simulate them)
 	•	x-expected-update-sequence (how Telegram behaves when responding to this method)
 
 🎯 The goal is to build a foundation for realistic Telegram bot simulation that:
-	•	Powers mocks and test engines (like telegram-mocker)
+	•	Powers (AI) mocks and test engines (like telegram-mocker)
 	•	Helps lint, simulate, and test edge cases in Telegram bots
 	•	Works even when Telegram’s docs are incomplete or vague
 
