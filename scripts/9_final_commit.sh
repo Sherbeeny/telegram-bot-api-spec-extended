@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "--------------------------------------------------"
-echo "Step 7: Final Commit"
+echo "Step 9: Final Commit"
 echo "--------------------------------------------------"
 echo "You have completed the prepublish routine."
 echo "You are now ready to commit your changes."

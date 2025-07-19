@@ -1,4 +1,9 @@
 {
+  "version": "Bot API 9.1",
+  "release_date": "July 3, 2025",
+  "changelog": "https://core.telegram.org/bots/api#july-3-2025",
+  "methods": {},
+  "types": {},
   "faq": {
     "how-do-i-create-a-bot": {
       "question": "How do I create a bot?",
@@ -451,6 +456,6 @@
       }
     }
   },
-  "methods": {},
-  "types": {}
+  "x-last-check": "2025-07-19T04:10:18.258024+03:00",
+  "x-last-edit": "2025-07-19T04:10:18.258024+03:00"
 }
