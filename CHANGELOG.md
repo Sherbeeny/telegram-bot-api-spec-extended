@@ -1,3 +1,8 @@
+## [2025.07.19-0431]
+### Changed
+- Enhanced the `README.md` file.
+- Updated the pre-publish routine to include a `README.md` check.
+
 ## [2025.07.19-0414]
 ### Changed
 - Implemented the timestamp logic in `update_extensions.py`.
